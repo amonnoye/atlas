@@ -1,19 +1,9 @@
 <template>
-  <q-layout view="hHh lpr fFf" class="gome">
-    <div class="background-wrapper">
-      <Transition
-        name="fade"
-        mode="out-in"
-        v-for="bg in backgroundImages"
-        :key="bg.url"
-      >
-        <div
-          v-show="bg.active"
-          class="background-image"
-          :style="{ backgroundImage: `url('${bg.url}')` }"
-        ></div>
-      </Transition>
-    </div>
+  <q-layout
+    view="hHh lpr fFf"
+    class="gome"
+    :style="{ backgroundImage: 'url(' + backgroundClass + ')' }"
+  >
     <q-header>
       <q-toolbar class="header-tb">
         <q-btn
@@ -56,19 +46,6 @@
         />
       </q-toolbar>
     </q-header>
-
-    <!-- <q-drawer v-model="leftDrawerOpen" v-if="false" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Essential Links </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer> -->
-
     <q-page-container>
       <router-view v-slot="{ Component }">
         <Transition name="out-in">
@@ -165,15 +142,12 @@ export default defineComponent({
     provide('bg-key', backgroundUrlIndex);
 
     const backgroundClass = computed(() => {
-      return backgroundImages[backgroundUrlIndex.value];
+      const t = backgroundUrlIndex.value;
+      // const activeBackground = backgroundImages.find((bg) => bg.active);
+      // console.log(activeBackground);
+      //return activeBackground ? activeBackground.url : '';
+      return backgroundImages[t].url;
     });
-
-    const backgrounds = reactive({
-      current: 'default',
-      next: 'accueil',
-    });
-
-    const animating = ref(false);
 
     // Méthodes pour changer l'image de fond
     function changeBackground(newIndex) {
@@ -188,27 +162,14 @@ export default defineComponent({
       () => backgroundUrlIndex.value,
       (newIndex) => {
         changeBackground(newIndex);
+        console.log('watcher');
+        console.log(backgroundImages);
       }
     );
 
     return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      },
       backgroundClass,
       backgroundImages,
-      currentBackgroundStyle: computed(() => ({
-        backgroundImage:
-          "url('src/assets/img/background/" + backgrounds.current + ".png')",
-        transform: animating.value ? 'translateY(-100%)' : 'translateY(0)',
-      })),
-      nextBackgroundStyle: computed(() => ({
-        backgroundImage: `url('src/assets/img/background/${backgrounds.next}.png')`,
-        transform: animating.value ? 'translateY(0)' : 'translateY(-100%)',
-      })),
-      animating,
     };
   },
 });
@@ -239,14 +200,10 @@ export default defineComponent({
 }
 
 .gome {
-  position: relative; // Pour positionner absolument les images de fond
-  background-color: aliceblue;
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity 0.5s;
-  }
-  .fade-enter, .fade-leave-to /* .fade-leave-active dans <2.1.8 */ {
-    opacity: 0;
-  }
+  position: relative; // For absolute positioning of child elements
+  background-color: rgb(255, 255, 255);
+  background-size: cover; // Cover the entire background
+  background-position: center; // Center the background image
+  background-repeat: no-repeat; // Do not repeat the image
 }
 </style>
