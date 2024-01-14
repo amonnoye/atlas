@@ -5,7 +5,7 @@
     :style="{ backgroundImage: 'url(' + backgroundClass + ')' }"
   >
     <q-header>
-      <q-toolbar class="header-tb silkfont q-pt-lg">
+      <q-toolbar class="header-tb silkfont">
         <q-btn
           flat
           dense
@@ -22,7 +22,7 @@
           unelevated
           label="Accueil"
           to="/home"
-          class="header-link"
+          class="header-link q-pt-lg"
         />
         <q-btn
           flat
@@ -30,15 +30,42 @@
           unelevated
           label="Agence"
           to="/agence"
-          class="header-link"
-        />
+          class="header-link q-pt-lg"
+          @mouseover="agenceDrop = true"
+        >
+          <q-menu
+            v-model="agenceDrop"
+            @mouseleave="agenceDrop = false"
+            fit
+            class="agence-menu silkfont"
+            anchor="top left"
+          >
+            <q-list style="min-width: 100px">
+              <q-item>
+                <q-item-section></q-item-section>
+              </q-item>
+              <q-item style="background-color: aqua; height: 10px !important">
+                <q-item-section></q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>Expertise</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>Nos chiffres</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>Équipe</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
         <q-btn
           flat
           no-caps
           unelevated
           label="Projets"
           to="/projects"
-          class="header-link"
+          class="header-link q-pt-lg"
         />
         <q-btn
           flat
@@ -46,15 +73,15 @@
           unelevated
           label="Contact"
           to="/contact"
-          class="header-link"
+          class="header-link q-pt-lg"
         />
-        <q-btn flat dense label="" class="q-ml-lg">
+        <q-btn flat dense label="" class="q-ml-lg q-pt-lg">
           <img src="src/assets/img/logo/facebook.png" />
         </q-btn>
-        <q-btn flat dense label="" class="q-ml-sm">
+        <q-btn flat dense label="" class="q-ml-sm q-pt-lg">
           <img src="src/assets/img/logo/instagram.png" />
         </q-btn>
-        <q-btn flat dense label="" class="q-ml-sm q-mr-lg">
+        <q-btn flat dense label="" class="q-ml-sm q-mr-lg q-pt-lg">
           <img src="src/assets/img/logo/linkedin.png" />
         </q-btn>
       </q-toolbar>
@@ -223,6 +250,8 @@ export default defineComponent({
       return backgroundImages[t].url;
     });
 
+    const agenceDrop = ref(false);
+
     // Méthodes pour changer l'image de fond
     function changeBackground(newIndex) {
       // Désactivez toutes les images
@@ -256,18 +285,18 @@ export default defineComponent({
       backgroundClass,
       backgroundImages,
       navbar,
+      agenceDrop,
     };
   },
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .header-tb,
 .footer-tb {
   color: #ffffff;
   text-transform: capitalize;
-  font-weight: light !important;
-  font-style: italic;
+  font-weight: 200 !important;
 }
 
 .header-link {
@@ -276,25 +305,32 @@ export default defineComponent({
 
 .footer-link {
   font-size: 1.2em;
-  font-weight: lighter !important;
+  font-weight: 100 !important;
 }
 .navbar-btn {
   position: absolute;
   top: 40%;
   right: 2%;
   text-transform: capitalize;
-  .row:hover {
-    // background-color: aqua;
-    color: #ffffff88 !important;
-    .div {
-      color: #ffffff88 !important;
-    }
-  }
+}
+.nav-txt {
+  font-size: 50px !important;
+  font-weight: 100;
 }
 .btn-fixed-width {
   width: 50px;
   // height: 50px;
   border-radius: 50%;
+}
+.agence-menu {
+  border-radius: 0;
+  background-color: transparent;
+  // background-color: rgba(black, 0.3) !important;
+  background-image: linear-gradient(
+    to bottom,
+    rgba($color: #ffffff, $alpha: 0),
+    rgba($color: #1e024d, $alpha: 0.8)
+  ) !important;
 }
 
 .background {
