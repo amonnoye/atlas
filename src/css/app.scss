@@ -1,3 +1,33 @@
 // app global css in SCSS form
 body {
+  font-family: 'silk-serif';
+}
+
+@font-face {
+  font-family: 'silk-serif';
+  src: url(./fonts/silk-serif-regular.otf) format('otf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'silk-serif';
+  src: url(./fonts/silk-serif-extralight.otf) format('otf');
+  font-weight: lighter;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: 'silk-serif';
+  src: url(./fonts/silk-serif-light.otf) format('otf');
+  font-weight: light;
+  font-style: normal;
+  font-display: block;
+}
+
+// declare a class which applies it
+.silkfont {
+  font-family: 'silk-serif';
+  color: #ffffff;
 }

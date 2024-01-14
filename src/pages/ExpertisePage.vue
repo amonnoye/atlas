@@ -12,7 +12,7 @@ export default {
     background.value = 2;
 
     const nav = inject('nav-key');
-    nav.value = 1;
+    nav.value = 2;
     return {};
   },
 };

@@ -5,7 +5,7 @@
     :style="{ backgroundImage: 'url(' + backgroundClass + ')' }"
   >
     <q-header>
-      <q-toolbar class="header-tb">
+      <q-toolbar class="header-tb silkfont q-pt-lg">
         <q-btn
           flat
           dense
@@ -18,34 +18,48 @@
         <q-space />
         <q-btn
           flat
+          no-caps
           unelevated
-          style="color: #ffffff"
           label="Accueil"
           to="/home"
+          class="header-link"
         />
         <q-btn
           flat
+          no-caps
           unelevated
-          style="color: #ffffff"
           label="Agence"
           to="/agence"
+          class="header-link"
         />
         <q-btn
           flat
+          no-caps
           unelevated
-          style="color: #ffffff"
           label="Projets"
           to="/projects"
+          class="header-link"
         />
         <q-btn
           flat
+          no-caps
           unelevated
-          style="color: #ffffff"
           label="Contact"
           to="/contact"
+          class="header-link"
         />
+        <q-btn flat dense label="" class="q-ml-lg">
+          <img src="src/assets/img/logo/facebook.png" />
+        </q-btn>
+        <q-btn flat dense label="" class="q-ml-sm">
+          <img src="src/assets/img/logo/instagram.png" />
+        </q-btn>
+        <q-btn flat dense label="" class="q-ml-sm q-mr-lg">
+          <img src="src/assets/img/logo/linkedin.png" />
+        </q-btn>
       </q-toolbar>
     </q-header>
+
     <q-page-container>
       <router-view v-slot="{ Component }">
         <Transition name="out-in">
@@ -54,20 +68,75 @@
       </router-view>
     </q-page-container>
 
-    <q-footer
-      ><q-toolbar class="footer-tb transparent">
-        <q-btn flat dense class="q-mr-md" label="Asgard" />
-        <q-btn flat dense label="ARGOS" class="q-mr-md" />
-        <q-btn flat dense label="ABYSS" class="q-mr-md" />
+    <div class="navbar-btn silkfont">
+      <div class="row">
+        <div
+          class="col-5 q-mt-sm"
+          :style="!navbar[0].active ? 'color: transparent' : ''"
+        >
+          Accueil
+        </div>
+        <q-btn flat dense label="" class="col-5 q-ml-sm btn-fixed-width">
+          <img src="src/assets/img/navbar/middle_o.png" />
+        </q-btn>
+      </div>
+      <div class="row">
+        <div
+          class="col-5 q-mt-lg q-mb-md"
+          :style="!navbar[1].active ? 'color: transparent' : ''"
+        >
+          Agence
+        </div>
+        <q-btn flat dense class="col-5 q-ml-sm q-mb-md q-mt-md btn-fixed-width">
+          <img src="src/assets/img/navbar/middle_o.png" />
+        </q-btn>
+      </div>
+      <div class="row">
+        <div
+          class="col-5 q-mt-sm"
+          :style="!navbar[2].active ? 'color: transparent' : ''"
+        >
+          Expertise
+        </div>
+        <q-btn flat dense class="col-5 q-ml-sm btn-fixed-width">
+          <img src="src/assets/img/navbar/middle_o.png" />
+        </q-btn>
+      </div>
+    </div>
+
+    <q-footer class=""
+      ><q-toolbar class="footer-tb transparent silkfont">
+        <q-btn flat dense class="q-mr-md q-ml-md q-mb-md q-mt-ml" label="">
+          <img src="src/assets/img/logo/asgard_logo.png" />
+        </q-btn>
+        <q-btn flat dense label="" class="q-mr-md q-mb-md">
+          <img src="src/assets/img/logo/argos_logo.png" />
+        </q-btn>
+        <q-btn flat dense label="" class="q-mr-md q-mb-md">
+          <img src="src/assets/img/logo/abyss_logo.png" />
+        </q-btn>
         <q-space />
-        <q-btn flat dense class="q-mr-md" label="Mentions Légales" />
         <q-btn
           flat
           dense
-          label="Politiques de confidentialité"
-          class="q-mr-md"
+          no-caps
+          class="q-mr-md footer-link"
+          label="Mentions Légales"
         />
-        <q-btn flat dense label="Atlas @2024" class="q-mr-md" />
+        <q-btn
+          flat
+          dense
+          no-caps
+          label="Politiques de confidentialité"
+          class="q-mr-md footer-link"
+        />
+        <q-btn
+          flat
+          dense
+          no-caps
+          label="Atlas©2024"
+          class="q-mr-md footer-link"
+        />
       </q-toolbar>
     </q-footer>
   </q-layout>
@@ -141,11 +210,16 @@ export default defineComponent({
     const backgroundUrlIndex = ref(0);
     provide('bg-key', backgroundUrlIndex);
 
+    const navbarIndex = ref(0);
+    provide('nav-key', navbarIndex);
+    const navbar = ref([
+      { name: 'accueil', active: true },
+      { url: 'agence', active: false },
+      { url: 'expertise', active: false },
+    ]);
+
     const backgroundClass = computed(() => {
       const t = backgroundUrlIndex.value;
-      // const activeBackground = backgroundImages.find((bg) => bg.active);
-      // console.log(activeBackground);
-      //return activeBackground ? activeBackground.url : '';
       return backgroundImages[t].url;
     });
 
@@ -157,19 +231,31 @@ export default defineComponent({
       backgroundImages[newIndex].active = true;
     }
 
+    function changeNavbar(newIndex) {
+      if (newIndex > 3) {
+        navbar.value.forEach((nb) => (nb.active = false));
+      } else {
+        navbar.value.forEach((nb) => (nb.active = false));
+        navbar.value[newIndex].active = true;
+      }
+    }
     // Observateurs pour gérer le changement d'image de fond
     watch(
       () => backgroundUrlIndex.value,
       (newIndex) => {
         changeBackground(newIndex);
-        console.log('watcher');
-        console.log(backgroundImages);
       }
     );
-
+    watch(
+      () => navbarIndex.value,
+      (newIndex) => {
+        changeNavbar(newIndex);
+      }
+    );
     return {
       backgroundClass,
       backgroundImages,
+      navbar,
     };
   },
 });
@@ -178,7 +264,37 @@ export default defineComponent({
 <style lang="scss" scoped>
 .header-tb,
 .footer-tb {
-  color: #000;
+  color: #ffffff;
+  text-transform: capitalize;
+  font-weight: light !important;
+  font-style: italic;
+}
+
+.header-link {
+  font-size: 1.6em;
+}
+
+.footer-link {
+  font-size: 1.2em;
+  font-weight: lighter !important;
+}
+.navbar-btn {
+  position: absolute;
+  top: 40%;
+  right: 2%;
+  text-transform: capitalize;
+  .row:hover {
+    // background-color: aqua;
+    color: #ffffff88 !important;
+    .div {
+      color: #ffffff88 !important;
+    }
+  }
+}
+.btn-fixed-width {
+  width: 50px;
+  // height: 50px;
+  border-radius: 50%;
 }
 
 .background {
