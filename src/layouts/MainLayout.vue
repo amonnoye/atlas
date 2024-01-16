@@ -5,7 +5,7 @@
     :style="{ backgroundImage: 'url(' + backgroundClass + ')' }"
   >
     <q-header>
-      <q-toolbar class="header-tb silkfont">
+      <q-toolbar class="header-tb">
         <q-btn
           flat
           dense
@@ -44,17 +44,50 @@
               <q-item>
                 <q-item-section></q-item-section>
               </q-item>
-              <q-item style="background-color: aqua; height: 10px !important">
+              <q-item style="height: 10px !important">
                 <q-item-section></q-item-section>
               </q-item>
               <q-item clickable>
-                <q-item-section>Expertise</q-item-section>
+                <q-item-section class="agence-menu-txt"
+                  >Expertise</q-item-section
+                >
               </q-item>
               <q-item clickable>
-                <q-item-section>Nos chiffres</q-item-section>
+                <q-item-section class="agence-menu-txt"
+                  >Nos chiffres</q-item-section
+                >
               </q-item>
               <q-item clickable>
-                <q-item-section>Équipe</q-item-section>
+                <q-item-section class="agence-menu-txt">Équipe</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+          <q-menu
+            v-model="agenceDrop"
+            @mouseleave="agenceDrop = false"
+            fit
+            class="agence-menu-2 silkfont"
+            anchor="top left"
+          >
+            <q-list style="min-width: 100px">
+              <q-item>
+                <q-item-section></q-item-section>
+              </q-item>
+              <q-item style="height: 10px !important">
+                <q-item-section></q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section class="agence-menu-txt"
+                  >Expertise</q-item-section
+                >
+              </q-item>
+              <q-item clickable>
+                <q-item-section class="agence-menu-txt"
+                  >Nos chiffres</q-item-section
+                >
+              </q-item>
+              <q-item clickable>
+                <q-item-section class="agence-menu-txt">Équipe</q-item-section>
               </q-item>
             </q-list>
           </q-menu>
@@ -103,8 +136,20 @@
         >
           Accueil
         </div>
-        <q-btn flat dense label="" class="col-5 q-ml-sm btn-fixed-width">
-          <img src="src/assets/img/navbar/middle_o.png" />
+        <q-btn
+          @click="goPage(0)"
+          flat
+          dense
+          label=""
+          class="col-5 q-ml-md btn-fixed-width"
+        >
+          <img
+            :src="
+              !navbar[0].active
+                ? 'src/assets/img/navbar/middle_o.png'
+                : 'src/assets/img/navbar/middle_f.png'
+            "
+          />
         </q-btn>
       </div>
       <div class="row">
@@ -114,8 +159,19 @@
         >
           Agence
         </div>
-        <q-btn flat dense class="col-5 q-ml-sm q-mb-md q-mt-md btn-fixed-width">
-          <img src="src/assets/img/navbar/middle_o.png" />
+        <q-btn
+          @click="goPage(1)"
+          flat
+          dense
+          class="col-5 q-ml-md q-mb-md q-mt-md btn-fixed-width"
+        >
+          <img
+            :src="
+              !navbar[1].active
+                ? 'src/assets/img/navbar/middle_o.png'
+                : 'src/assets/img/navbar/middle_f.png'
+            "
+          />
         </q-btn>
       </div>
       <div class="row">
@@ -125,8 +181,19 @@
         >
           Expertise
         </div>
-        <q-btn flat dense class="col-5 q-ml-sm btn-fixed-width">
-          <img src="src/assets/img/navbar/middle_o.png" />
+        <q-btn
+          @click="goPage(2)"
+          flat
+          dense
+          class="col-5 q-ml-md btn-fixed-width"
+        >
+          <img
+            :src="
+              !navbar[2].active
+                ? 'src/assets/img/navbar/middle_o.png'
+                : 'src/assets/img/navbar/middle_f.png'
+            "
+          />
         </q-btn>
       </div>
     </div>
@@ -172,6 +239,7 @@
 <script lang="ts">
 import { defineComponent, provide, ref, computed, reactive, watch } from 'vue';
 import EssentialLink from 'components/EssentialLink.vue';
+import { useRouter } from 'vue-router';
 
 const linksList = [
   {
@@ -227,7 +295,7 @@ export default defineComponent({
 
   setup() {
     const leftDrawerOpen = ref(false);
-
+    const router = useRouter();
     const backgroundImages = [
       { url: 'src/assets/img/background/default.png', active: true },
       { url: 'src/assets/img/background/accueil.png', active: false },
@@ -268,6 +336,12 @@ export default defineComponent({
         navbar.value[newIndex].active = true;
       }
     }
+
+    const pageList = ['home', 'agence', 'expertise'];
+
+    function goPage(index) {
+      router.push({ name: pageList[index] });
+    }
     // Observateurs pour gérer le changement d'image de fond
     watch(
       () => backgroundUrlIndex.value,
@@ -286,6 +360,7 @@ export default defineComponent({
       backgroundImages,
       navbar,
       agenceDrop,
+      goPage,
     };
   },
 });
@@ -296,7 +371,7 @@ export default defineComponent({
 .footer-tb {
   color: #ffffff;
   text-transform: capitalize;
-  font-weight: 200 !important;
+  font-weight: 100 !important;
 }
 
 .header-link {
@@ -323,14 +398,43 @@ export default defineComponent({
   border-radius: 50%;
 }
 .agence-menu {
+  position: relative;
+  z-index: 1;
   border-radius: 0;
   background-color: transparent;
   // background-color: rgba(black, 0.3) !important;
   background-image: linear-gradient(
     to bottom,
     rgba($color: #ffffff, $alpha: 0),
-    rgba($color: #1e024d, $alpha: 0.8)
+    rgba($color: #1e024d, $alpha: 1)
   ) !important;
+  mix-blend-mode: overlay !important;
+  box-shadow: none;
+  .q-item-section {
+  }
+}
+
+.agence-menu-2 {
+  position: relative;
+  z-index: 1;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+  // background-color: rgba(black, 0.3) !important;
+  // background-image: linear-gradient(
+  //   to bottom,
+  //   rgba($color: #ffffff, $alpha: 0),
+  //   rgba($color: #1e024d, $alpha: 1)
+  // ) !important;
+  // mix-blend-mode: color !important;
+  // #1e024d
+  .q-item-section {
+  }
+}
+
+.agence-menu-txt {
+  //background-color: aqua;
+  mix-blend-mode: normal !important;
 }
 
 .background {

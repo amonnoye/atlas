@@ -15,7 +15,9 @@
         class="project-btn"
         @click="gotoProject"
       >
-        <div class="absolute-full bg-transparent flex flex-center silkfont">
+        <div
+          class="absolute-full bg-transparent flex flex-center silkfont text-center"
+        >
           Projets
         </div>
       </q-img>

@@ -3,6 +3,10 @@ body {
   font-family: 'mysilk';
 }
 
+.text-white {
+  color: #ffffff;
+}
+
 @font-face {
   font-family: 'Silk Serif';
   src: url(./fonts/silk-serif-regular.otf) format('otf');
@@ -28,13 +32,13 @@ body {
 
 // declare a class which applies it
 .silkfont {
-  font-family: 'Silk Serif';
+  font-family: 'mysilk';
   color: #ffffff;
 }
 
 @font-face {
   font-family: 'mysilk';
-  src: url(./fonts/silk-serif-extralight.otf) format('otf');
+  src: url(./fonts/SilkSerif-ExtraLight.woff) format('woff');
   font-style: normal;
   font-display: swap;
 }
