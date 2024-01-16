@@ -150,6 +150,10 @@
                 : 'src/assets/img/navbar/middle_f.png'
             "
           />
+          <img
+            style="position: absolute; bottom: 90%"
+            src="src/assets/img/navbar/bar.png"
+          />
         </q-btn>
       </div>
       <div class="row">
@@ -193,6 +197,10 @@
                 ? 'src/assets/img/navbar/middle_o.png'
                 : 'src/assets/img/navbar/middle_f.png'
             "
+          />
+          <img
+            style="position: absolute; top: 90%"
+            src="src/assets/img/navbar/bar.png"
           />
         </q-btn>
       </div>

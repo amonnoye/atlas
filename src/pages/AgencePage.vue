@@ -96,7 +96,8 @@ export default {
   font-size: 6vh;
   text-transform: uppercase;
   color: white;
-  font-weight: 100;
+  // font-weight: 100;
+  letter-spacing: 0.4dvh;
 }
 
 .row {
