@@ -6,15 +6,9 @@
   >
     <q-header>
       <q-toolbar class="header-tb">
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-          v-if="false"
-        />
+        <q-btn flat dense label="" class="q-ml-lg q-pt-lg" to="/home">
+          <img src="src/assets/img/logo/logoxs.png" />
+        </q-btn>
         <q-space />
         <q-btn
           flat
@@ -23,6 +17,7 @@
           label="Accueil"
           to="/home"
           class="header-link q-pt-lg"
+          :class="headerIndex == 0 ? 'header-active' : ''"
         />
         <q-btn
           flat
@@ -32,6 +27,7 @@
           to="/agence"
           class="header-link q-pt-lg"
           @mouseover="agenceDrop = true"
+          :class="headerIndex == 1 ? 'header-active' : ''"
         >
           <q-menu
             v-model="agenceDrop"
@@ -47,17 +43,17 @@
               <q-item style="height: 10px !important">
                 <q-item-section></q-item-section>
               </q-item>
-              <q-item clickable>
+              <q-item active-class="" clickable to="/expertise">
                 <q-item-section class="agence-menu-txt"
                   >Expertise</q-item-section
                 >
               </q-item>
-              <q-item clickable>
+              <q-item active-class="" clickable to="/chiffre">
                 <q-item-section class="agence-menu-txt"
                   >Nos chiffres</q-item-section
                 >
               </q-item>
-              <q-item clickable>
+              <q-item active-class="" clickable to="/equipe">
                 <q-item-section class="agence-menu-txt">Équipe</q-item-section>
               </q-item>
             </q-list>
@@ -76,17 +72,17 @@
               <q-item style="height: 10px !important">
                 <q-item-section></q-item-section>
               </q-item>
-              <q-item clickable>
+              <q-item active-class="" clickable to="/expertise">
                 <q-item-section class="agence-menu-txt"
                   >Expertise</q-item-section
                 >
               </q-item>
-              <q-item clickable>
+              <q-item active-class="" clickable to="/chiffre">
                 <q-item-section class="agence-menu-txt"
                   >Nos chiffres</q-item-section
                 >
               </q-item>
-              <q-item clickable>
+              <q-item active-class="" clickable to="/equipe">
                 <q-item-section class="agence-menu-txt">Équipe</q-item-section>
               </q-item>
             </q-list>
@@ -99,6 +95,7 @@
           label="Projets"
           to="/projects"
           class="header-link q-pt-lg"
+          :class="headerIndex == 2 ? 'header-active' : ''"
         />
         <q-btn
           flat
@@ -107,6 +104,7 @@
           label="Contact"
           to="/contact"
           class="header-link q-pt-lg"
+          :class="headerIndex == 3 ? 'header-active' : ''"
         />
         <q-btn flat dense label="" class="q-ml-lg q-pt-lg">
           <img src="src/assets/img/logo/facebook.png" />
@@ -128,7 +126,7 @@
       </router-view>
     </q-page-container>
 
-    <div class="navbar-btn silkfont">
+    <div class="navbar-btn silkfont" v-if="navbarIsShown">
       <div class="row">
         <div
           class="col-5 q-mt-sm"
@@ -302,7 +300,7 @@ export default defineComponent({
   },
 
   setup() {
-    const leftDrawerOpen = ref(false);
+    const agenceDrop = ref(false);
     const router = useRouter();
     const backgroundImages = [
       { url: 'src/assets/img/background/default.png', active: true },
@@ -321,12 +319,19 @@ export default defineComponent({
       { url: 'expertise', active: false },
     ]);
 
+    const headerIndex = ref(0);
+    provide('header-key', headerIndex);
+    const header = ref([
+      { name: 'accueil', active: true },
+      { url: 'agence', active: false },
+      { url: 'projets', active: false },
+      { url: 'contact', active: false },
+    ]);
+
     const backgroundClass = computed(() => {
       const t = backgroundUrlIndex.value;
       return backgroundImages[t].url;
     });
-
-    const agenceDrop = ref(false);
 
     // Méthodes pour changer l'image de fond
     function changeBackground(newIndex) {
@@ -336,12 +341,15 @@ export default defineComponent({
       backgroundImages[newIndex].active = true;
     }
 
+    const navbarIsShown = ref(true);
     function changeNavbar(newIndex) {
       if (newIndex > 3) {
         navbar.value.forEach((nb) => (nb.active = false));
+        navbarIsShown.value = false;
       } else {
         navbar.value.forEach((nb) => (nb.active = false));
         navbar.value[newIndex].active = true;
+        navbarIsShown.value = true;
       }
     }
 
@@ -367,7 +375,11 @@ export default defineComponent({
       backgroundClass,
       backgroundImages,
       navbar,
+      navbarIsShown,
       agenceDrop,
+      header,
+      headerIndex,
+
       goPage,
     };
   },
@@ -384,6 +396,22 @@ export default defineComponent({
 
 .header-link {
   font-size: 1.6em;
+}
+
+.header-active {
+  font-weight: 600;
+}
+
+.header-active::before {
+  content: '';
+  position: absolute;
+  left: 15%;
+  top: 3em;
+  width: 1.6em;
+  height: 0.1em;
+  transform: translateX(50%);
+  background: white;
+  z-index: -1;
 }
 
 .footer-link {

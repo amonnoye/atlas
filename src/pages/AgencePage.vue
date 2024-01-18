@@ -14,6 +14,7 @@
           src="src/assets/img/circle.png"
           width="15vw"
           class="project-btn"
+          @click="goToChiffre()"
         >
           <div
             class="absolute-full bg-transparent flex flex-center silkfont"
@@ -24,72 +25,122 @@
         </q-img>
       </div>
     </div>
+    <div class="carroussel-container">
+      <q-carousel
+        v-model="slide"
+        transition-prev="slide-down"
+        transition-next="slide-up"
+        vertical
+        swipeable
+        infinite
+        animated
+        autoplay
+        control-color="white"
+        navigation
+        navigation-position="left"
+        padding
+        height="25vh"
+        class="bg-transparent text-white rounded-borders"
+      >
+        <template v-slot:navigation-icon="{ active, btnProps, onClick }">
+          <q-btn
+            v-if="active"
+            size="0.7vh"
+            icon="radio_button_checked"
+            flat
+            round
+            dense
+            style="margin: 0; padding: 0.3vh"
+            @click="onClick"
+          />
+          <q-btn
+            v-else
+            size="0.6vh"
+            :icon="btnProps.icon"
+            flat
+            round
+            dense
+            style="margin: 0; padding: 0.3vh"
+            @click="onClick"
+          />
+        </template>
+
+        <q-carousel-slide
+          :name="val.id"
+          class="column no-wrap"
+          v-for="val in valeur"
+          v-bind:key="val.id"
+        >
+          <div class="q-mt-md val-title">{{ val.title }}</div>
+          <div class="q-mt-md val-text">{{ val.text }}</div>
+        </q-carousel-slide>
+      </q-carousel>
+    </div>
   </div>
-  <!-- <div class="q-pa-md">
-    <q-carousel
-      v-model="slide"
-      vertical
-      transition-prev="slide-down"
-      transition-next="slide-up"
-      swipeable
-      animated
-      control-color="white"
-      navigation-icon="radio_button_unchecked"
-      navigation
-      padding
-      arrows
-      height="300px"
-      class="bg-purple text-white shadow-1 rounded-borders"
-    >
-      <q-carousel-slide name="style" class="column no-wrap flex-center">
-        <q-icon name="style" size="56px" />
-        <div class="q-mt-md text-center">
-          {{ lorem }}
-        </div>
-      </q-carousel-slide>
-      <q-carousel-slide name="tv" class="column no-wrap flex-center">
-        <q-icon name="live_tv" size="56px" />
-        <div class="q-mt-md text-center">
-          {{ lorem }}
-        </div>
-      </q-carousel-slide>
-      <q-carousel-slide name="layers" class="column no-wrap flex-center">
-        <q-icon name="layers" size="56px" />
-        <div class="q-mt-md text-center">
-          {{ lorem }}
-        </div>
-      </q-carousel-slide>
-      <q-carousel-slide name="map" class="column no-wrap flex-center">
-        <q-icon name="terrain" size="56px" />
-        <div class="q-mt-md text-center">
-          {{ lorem }}
-        </div>
-      </q-carousel-slide>
-    </q-carousel>
-  </div> -->
 </template>
 
 <script>
 import { inject, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   components: {},
   setup() {
+    const router = useRouter();
     const background = inject('bg-key');
     background.value = 0;
 
+    const slide = ref(0);
     const nav = inject('nav-key');
     nav.value = 1;
-    return {};
+
+    const header = inject('header-key');
+    header.value = 1;
+
+    const valeur = [
+      {
+        id: 0,
+        title: 'Éloquence',
+        text: "Mais nous ne parlons pas pour ne rien dire, Lorsque Atlas prend la parole c'est qu'il y a un intérêt et que c'est pertinent pour votre marque.",
+      },
+      {
+        id: 1,
+        title: 'Éloquence2',
+        text: "Mais nous ne parlons pas pour ne rien dire, Lorsque Atlas prend la parole c'est qu'il y a un intérêt et que c'est pertinent pour votre marque.",
+      },
+      {
+        id: 2,
+        title: 'Éloquence3',
+        text: "Mais nous ne parlons pas pour ne rien dire, Lorsque Atlas prend la parole c'est qu'il y a un intérêt et que c'est pertinent pour votre marque.",
+      },
+      {
+        id: 3,
+        title: 'Éloquence4',
+        text: "Mais nous ne parlons pas pour ne rien dire, Lorsque Atlas prend la parole c'est qu'il y a un intérêt et que c'est pertinent pour votre marque.",
+      },
+    ];
+    console.log(valeur);
+
+    function goToChiffre() {
+      const navigationResult = router.push({ name: 'chiffre' });
+    }
+    return {
+      slide,
+      valeur,
+      goToChiffre,
+    };
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .title {
-  font-size: 3.5vh;
+  font-size: 4.5vh;
   text-transform: uppercase;
   color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 100;
+  letter-spacing: 0.4dvh;
 }
 .subtitle {
   font-family: 'mysilk';
@@ -109,6 +160,26 @@ export default {
   top: 28%;
   margin-left: 10vw;
 }
+
+.carroussel-container {
+  position: absolute;
+  width: 26%;
+  top: 55%;
+  margin-left: 12vw;
+  background-color: transparent;
+}
+
+.val-title {
+  text-align: left !important;
+  margin: 0;
+  font-size: 2.6vw;
+}
+.val-text {
+  font-size: 1vw;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 100;
+  overflow-wrap: break-word;
+}
 .project-btn {
   position: absolute;
   top: 80%;
@@ -116,5 +187,10 @@ export default {
   font-size: 3.5vw;
   z-index: 1;
   line-height: 3.5vw;
+}
+
+.project-btn:hover {
+  // background-color: aqua;
+  scale: 1.1;
 }
 </style>

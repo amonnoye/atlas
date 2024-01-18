@@ -39,8 +39,10 @@ export default {
     const nav = inject('nav-key');
     nav.value = 0;
 
+    const header = inject('header-key');
+    header.value = 0;
+
     function gotoProject() {
-      console.log('lol;');
       const navigationResult = router.push({ name: 'projects' });
     }
 
