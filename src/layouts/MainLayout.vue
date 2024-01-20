@@ -390,6 +390,7 @@ export default defineComponent({
 .header-tb,
 .footer-tb {
   color: #ffffff;
+
   text-transform: capitalize;
   font-weight: 100 !important;
 }
