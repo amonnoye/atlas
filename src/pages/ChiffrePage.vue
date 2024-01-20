@@ -109,10 +109,11 @@ export default {
   position: fixed; /* Positionnement fixe par rapport à la fenêtre du navigateur */
   bottom: 1vh; /* Espacement par rapport au bas de la page */
   right: 50%; /* Espacement par rapport au côté droit de la page */
-  z-index: 1000; /* Assurez-vous qu'il est au-dessus des autres éléments de la page */
+  z-index: 2001; /* Assurez-vous qu'il est au-dessus des autres éléments de la page */
   font-size: 1.4vw;
   color: #ffffff;
   text-transform: capitalize;
+  border-radius: 5%;
 }
 
 // @media screen and (max-width: 600px) {

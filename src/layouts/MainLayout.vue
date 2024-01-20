@@ -5,7 +5,13 @@
     :style="{ backgroundImage: 'url(' + backgroundClass + ')' }"
   >
     <q-header>
-      <q-toolbar class="header-tb">
+      <q-toolbar class="header-tb position-relative" style="padding-left: 0%">
+        <div class="background-project" v-if="headerIndex == 2">
+          <div class="row full-width full-height">
+            <div class="col-4"></div>
+            <div class="col-8 bg-project"></div>
+          </div>
+        </div>
         <q-btn flat dense label="" class="q-ml-lg q-pt-lg" to="/home">
           <img src="src/assets/img/logo/logoxs.png" />
         </q-btn>
@@ -205,7 +211,13 @@
     </div>
 
     <q-footer class=""
-      ><q-toolbar class="footer-tb transparent silkfont">
+      ><q-toolbar class="footer-tb transparent silkfont position-relative">
+        <div class="background-project" v-if="headerIndex == 2">
+          <div class="row full-width full-height">
+            <div class="col-4"></div>
+            <div class="col-8 bg-project"></div>
+          </div>
+        </div>
         <q-btn flat dense class="q-mr-md q-ml-md q-mb-md q-mt-ml" label="">
           <img src="src/assets/img/logo/asgard_logo.png" />
         </q-btn>
@@ -412,7 +424,7 @@ export default defineComponent({
   height: 0.1em;
   transform: translateX(50%);
   background: white;
-  z-index: -1;
+  z-index: 1;
 }
 
 .footer-link {
@@ -498,5 +510,16 @@ export default defineComponent({
   background-size: cover; // Cover the entire background
   background-position: center; // Center the background image
   background-repeat: no-repeat; // Do not repeat the image
+}
+
+.background-project {
+  position: absolute;
+  // background-color: #1e024d;
+  height: 100%;
+  width: 100%;
+}
+
+.bg-project {
+  background-color: #1e024d;
 }
 </style>
