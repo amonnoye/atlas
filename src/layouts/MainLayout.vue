@@ -421,7 +421,7 @@ export default defineComponent({
 }
 .navbar-btn {
   position: absolute;
-  top: 40%;
+  top: 44%;
   right: 2%;
   text-transform: capitalize;
 }

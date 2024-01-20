@@ -10,9 +10,9 @@
           <q-img
             alt="Atlas - Agence de social média marketing et d'influence"
             src="src/assets/img/circle_expert.png"
-            width="20vw"
+            width="18vw"
             class="project-btn"
-            @click="goToChiffre()"
+            @click="goToTeam()"
           >
             <div class="absolute-full bg-transparent flex flex-center silkfont">
               L'équipe
@@ -21,14 +21,14 @@
         </div>
       </div>
       <div class="services-section">
-        <div class="row q-col-gutter-md" style="width: 50vw; height: 50vh">
+        <div class="row" style="width: 54vw; height: 45vh">
           <service-card
             v-for="service in services"
             :key="service.title"
             :icon="service.icon"
             :title="service.title"
             :description="service.description"
-            class="col-auto col-sm-4 q-px-md"
+            class="col-auto col-sm-4 q-pr-md"
           />
         </div>
       </div>
@@ -37,6 +37,7 @@
 </template>
 <script>
 import { inject, ref, defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
 import ServiceCard from 'components/ServiceCard.vue';
 
 export default {
@@ -44,6 +45,7 @@ export default {
     ServiceCard,
   },
   setup() {
+    const router = useRouter();
     const background = inject('bg-key');
     background.value = 0;
 
@@ -73,26 +75,31 @@ export default {
       },
       {
         icon: 'lightbulb_outline',
-        title: 'Stratégie Sociale & Éditoriale',
+        title: 'Brand \n content',
         description:
-          'Nous construisons une stratégie unique pour chacun de nos clients.',
+          "Nous créons des contenus insmpirants pour créer de l'engagement",
       },
       {
         icon: 'fas fa-box-open',
-        title: 'Stratégie Sociale & Éditoriale',
+        title: "L'influence et unboxing",
         description:
-          'Nous construisons une stratégie unique pour chacun de nos clients.',
+          "Nous montons des programmes d'influence pour démultiplier la visibilité de vos contenus",
       },
       {
         icon: 'phonelink',
-        title: 'Stratégie Sociale & Éditoriale',
+        title: 'Activations & expériences digitales',
         description:
-          'Nous construisons une stratégie unique pour chacun de nos clients.',
+          'Nous contruisons une stratégie unique pour chacun de nos clients',
       },
     ];
 
+    function goToTeam() {
+      router.push({ name: 'equipe' });
+    }
+
     return {
       services,
+      goToTeam,
     };
   },
 };
@@ -102,10 +109,9 @@ export default {
 .project-btn {
   position: absolute;
   top: 8%;
-  left: 90%;
-  font-size: 3.5vw;
+  left: 91%;
+  font-size: 3vw;
   z-index: 1;
-  line-height: 3.5vw;
 }
 
 .project-btn:hover {
@@ -132,13 +138,13 @@ export default {
 
 .txt-container {
   position: absolute;
-  top: 8%;
-  margin-left: 10vw;
+  top: 10%;
+  margin-left: 9vw;
 }
 
 .services-section {
   position: absolute;
   top: 35%;
-  margin-left: 10vw;
+  margin-left: 9vw;
 }
 </style>

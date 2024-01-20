@@ -37,6 +37,9 @@ export default defineComponent({
 }
 .text-title {
   font-size: 1.8vw;
+  white-space: pre-line; /* This will respect newlines in the text */
+  line-height: 2vw;
+  margin-bottom: 1vh;
 }
 .text-caption {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
