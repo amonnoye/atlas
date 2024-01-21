@@ -12,7 +12,9 @@
             {{ text }}
           </div>
         </div>
-        <div class="col-8 project-view"></div>
+        <div class="col-8 project-view">
+          <logo-scroll-list :logos="logos" class="logo-scroll-list" />
+        </div>
       </div>
     </div>
   </div>
@@ -22,10 +24,12 @@
 import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import QImgGallery from 'components/QImgGallery.vue'; // Assurez-vous d'avoir ce composant ou utilisez une alternative
+import LogoScrollList from 'src/components/LogoScrollList.vue';
 
 export default {
   components: {
     //QImgGallery,
+    LogoScrollList,
   },
   setup() {
     const router = useRouter();
@@ -55,13 +59,14 @@ export default {
 
     const logos = [
       'isigny.png',
+
       'fromage_aop.png',
       'sdn.png',
       'cnaol.png',
       'huitre.png',
       'livarot.png',
       'pontleveque.png',
-      'viande',
+      'viande.png',
       // Ajoutez plus de chemins vers les logos de vos clients
     ];
 
@@ -119,5 +124,10 @@ export default {
 
 .project-view {
   background-color: #1e024d;
+  padding: 4vw 8vw;
 }
+
+/* .logo-scroll-list {
+  overflow-x: auto;
+}*/
 </style>
