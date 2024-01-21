@@ -3,12 +3,15 @@
     <q-btn icon="arrow_left" flat @click="scrollLeft" class="scroll-button" />
     <div class="logo-window" ref="logoWindow">
       <div
-        class="logo-track"
+        class="logo-track position-relative"
         :style="{ transform: `translateX(-${scrollPosition}px)` }"
       >
         <img
           v-for="(logo, index) in duplicatedLogos"
-          :src="'src/assets/img/project/' + logo"
+          :src="
+            'src/assets/img/project/' +
+            (selectedLogoIndex === index ? logosel[index] : logo)
+          "
           :key="index"
           :alt="`Logo ${index + 1}`"
           class="logo-item"
@@ -27,6 +30,10 @@ import { ref, computed, watch, onMounted, nextTick, watchEffect } from 'vue';
 export default {
   props: {
     logos: {
+      type: Array,
+      required: true,
+    },
+    logosel: {
       type: Array,
       required: true,
     },
@@ -50,11 +57,31 @@ export default {
       );
     });
 
+    // function selectLogo(index) {
+    //   selectedLogoIndex.value = index;
+
+    //   // Calculez et ajustez la position pour centrer le logo
+    //   const logosBeforeSelected = index;
+    //   const offset = logosBeforeSelected * logoWidth.value;
+    //   const halfWindowWidth = logoWindow.value.offsetWidth / 2;
+    //   const logoHalfWidth = logoWidth.value / 2;
+    //   scrollPosition.value = Math.max(
+    //     offset + logoHalfWidth - halfWindowWidth,
+    //     0
+    //   );
+    // }
+
     function selectLogo(index) {
-      selectedLogoIndex.value = index;
+      selectedLogoIndex.value = index % props.logos.length;
+      let targetIndex = index;
+
+      // Si le logo sélectionné est dans la deuxième moitié des logos dupliqués
+      if (index >= props.logos.length) {
+        targetIndex = index - props.logos.length;
+      }
+
       // Calculez et ajustez la position pour centrer le logo
-      const logosBeforeSelected = index;
-      const offset = logosBeforeSelected * logoWidth.value;
+      const offset = targetIndex * logoWidth.value;
       const halfWindowWidth = logoWindow.value.offsetWidth / 2;
       const logoHalfWidth = logoWidth.value / 2;
       scrollPosition.value = Math.max(
@@ -180,17 +207,30 @@ export default {
 .logo-item {
   /* width en pourcentage pour une largeur réactive */
   width: calc(
-    100vw / 8 - 4vw
-  ); /* Ici, 8 est le nombre de logos visibles et 2vw est l'espacement total à droite */
+    100vw / 8 - 2vw
+  ) !important; /* Ici, 8 est le nombre de logos visibles et 2vw est l'espacement total à droite */
   /*height: auto !important;*/
   margin-right: 2vw; /* Espace entre les logos */
 }
 .selected-logo {
   /* border: 2px solid #c5a0d3; /* Style pour le logo sélectionné */
   color: #c5a0d3;
+  /* background-color: #c5a0d3; */
 }
 .scroll-button {
   min-width: auto;
   color: white;
+}
+
+.selected-logo::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -10px; /* Ajustez en fonction de la distance souhaitée du bas du logo */
+  width: 70%; /* Ajustez en fonction de la largeur souhaitée du trait */
+  height: 2px; /* Ajustez en fonction de l'épaisseur souhaitée du trait */
+  background: blue; /* Couleur du trait */
+  transform: translateX(-50%);
+  z-index: 1;
 }
 </style>

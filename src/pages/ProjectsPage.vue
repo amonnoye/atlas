@@ -13,7 +13,11 @@
           </div>
         </div>
         <div class="col-8 project-view">
-          <logo-scroll-list :logos="logos" class="logo-scroll-list" />
+          <logo-scroll-list
+            :logos="logos"
+            :logosel="sellogos"
+            class="logo-scroll-list"
+          />
         </div>
       </div>
     </div>
@@ -59,7 +63,6 @@ export default {
 
     const logos = [
       'isigny.png',
-
       'fromage_aop.png',
       'sdn.png',
       'cnaol.png',
@@ -67,6 +70,18 @@ export default {
       'livarot.png',
       'pontleveque.png',
       'viande.png',
+      // Ajoutez plus de chemins vers les logos de vos clients
+    ];
+
+    const sellogos = [
+      'isigny_s.png',
+      'fromage_aop_s.png',
+      'sdn_s.png',
+      'cnaol_s.png',
+      'huitre_s.png',
+      'livarot_s.png',
+      'pontleveque_s.png',
+      'viande_s.png',
       // Ajoutez plus de chemins vers les logos de vos clients
     ];
 
@@ -82,6 +97,7 @@ export default {
     return {
       slide,
       logos,
+      sellogos,
       galleryImages,
       text,
       intro,
