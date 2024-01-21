@@ -1,15 +1,15 @@
 <template class="contact">
   <div class="contact-page">
     <div class="contact-info">
-      <div style="font-size: 3.5vw; margin-bottom: 1vh">Contact</div>
-      <div style="font-size: 2vw; margin-bottom: 4vh">
+      <div style="font-size: 3.5vw; margin-bottom: 2vh">Contact</div>
+      <div style="font-size: 1.7vw; margin-bottom: 5vh">
         contact@agence-atlas.fr
       </div>
-      <div style="font-size: 2vw; line-height: 2vh">
+      <div style="font-size: 1.7vw; line-height: 2vh">
         147 rue de la Délivrande
       </div>
-      <div style="font-size: 2vw; margin-bottom: 3vh">14000 Caen</div>
-      <div style="font-size: 2vw">09 72 91 32 28</div>
+      <div style="font-size: 1.7vw; margin-bottom: 3vh">14000 Caen</div>
+      <div style="font-size: 1.7vw">09 72 91 32 28</div>
       <div class="social-media">
         <!-- Icônes des réseaux sociaux ici -->
       </div>
@@ -52,6 +52,7 @@
           v-model="form.message"
           label="Demande*"
           type="textarea"
+          autogrow
           required
           color="white"
           label-color="white"
@@ -65,7 +66,9 @@
           checked-icon="check_box"
           unchecked-icon="check_box_outline_blank"
           keep-color
+          style="font-size: 01vw"
           color="white"
+          size="lg"
         />
 
         <q-btn
@@ -77,7 +80,7 @@
           outline
           style="margin-left: 8vw; margin-right: 8vw; height: 3vw"
         />
-        <div class="text-center q-mt-md">* Obligatoire</div>
+        <div class="text-center q-mt-md">* Obligatoires</div>
       </q-form>
     </div>
   </div>
@@ -134,6 +137,10 @@ export default {
 </script>
 
 <style lang="scss">
+.q-field__label {
+  font-size: 1vw !important;
+  top: 0.5vh;
+}
 .q-field--standard .q-field__control::before {
   border-bottom: 1px solid white !important;
 }
@@ -143,7 +150,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 .custom-input {
-  margin-bottom: 1vh;
+  margin-bottom: 2.5vh;
 }
 .contact-page {
   display: flex;
@@ -157,7 +164,7 @@ export default {
   }
 
   .contact-form {
-    width: 30%; // Ajustez selon vos besoins
+    width: 33%; // Ajustez selon vos besoins
     // Styles supplémentaires pour les champs de formulaire et le bouton
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
