@@ -13,7 +13,7 @@
           </div>
         </div>
         <q-btn flat dense label="" class="q-ml-lg q-pt-lg" to="/home">
-          <img src="src/assets/img/logo/logoxs.png" />
+          <img src="../assets/img/logo/logoxs.png" />
         </q-btn>
         <q-space />
         <q-btn
@@ -113,13 +113,13 @@
           :class="headerIndex == 3 ? 'header-active' : ''"
         />
         <q-btn flat dense label="" class="q-ml-lg q-pt-lg">
-          <img src="src/assets/img/logo/facebook.png" />
+          <img src="../assets/img/logo/facebook.png" />
         </q-btn>
         <q-btn flat dense label="" class="q-ml-sm q-pt-lg">
-          <img src="src/assets/img/logo/instagram.png" />
+          <img src="../assets/img/logo/instagram.png" />
         </q-btn>
         <q-btn flat dense label="" class="q-ml-sm q-mr-lg q-pt-lg">
-          <img src="src/assets/img/logo/linkedin.png" />
+          <img src="../assets/img/logo/linkedin.png" />
         </q-btn>
       </q-toolbar>
     </q-header>
@@ -147,16 +147,10 @@
           label=""
           class="col-5 q-ml-md btn-fixed-width"
         >
-          <img
-            :src="
-              !navbar[0].active
-                ? 'src/assets/img/navbar/middle_o.png'
-                : 'src/assets/img/navbar/middle_f.png'
-            "
-          />
+          <img :src="!navbar[0].active ? middleO : middleF" />
           <img
             style="position: absolute; bottom: 90%"
-            src="src/assets/img/navbar/bar.png"
+            src="../assets/img/navbar/bar.png"
           />
         </q-btn>
       </div>
@@ -173,13 +167,7 @@
           dense
           class="col-5 q-ml-md q-mb-md q-mt-md btn-fixed-width"
         >
-          <img
-            :src="
-              !navbar[1].active
-                ? 'src/assets/img/navbar/middle_o.png'
-                : 'src/assets/img/navbar/middle_f.png'
-            "
-          />
+          <img :src="!navbar[1].active ? middleO : middleF" />
         </q-btn>
       </div>
       <div class="row">
@@ -195,16 +183,10 @@
           dense
           class="col-5 q-ml-md btn-fixed-width"
         >
-          <img
-            :src="
-              !navbar[2].active
-                ? 'src/assets/img/navbar/middle_o.png'
-                : 'src/assets/img/navbar/middle_f.png'
-            "
-          />
+          <img :src="!navbar[2].active ? middleO : middleF" />
           <img
             style="position: absolute; top: 90%"
-            src="src/assets/img/navbar/bar.png"
+            src="../assets/img/navbar/bar.png"
           />
         </q-btn>
       </div>
@@ -219,13 +201,13 @@
           </div>
         </div>
         <q-btn flat dense class="q-mr-md q-ml-md q-mb-md q-mt-ml" label="">
-          <img src="src/assets/img/logo/asgard_logo.png" />
+          <img src="../assets/img/logo/asgard_logo.png" />
         </q-btn>
         <q-btn flat dense label="" class="q-mr-md q-mb-md">
-          <img src="src/assets/img/logo/argos_logo.png" />
+          <img src="../assets/img/logo/argos_logo.png" />
         </q-btn>
         <q-btn flat dense label="" class="q-mr-md q-mb-md">
-          <img src="src/assets/img/logo/abyss_logo.png" />
+          <img src="../assets/img/logo/abyss_logo.png" />
         </q-btn>
         <q-space />
         <q-btn
@@ -255,7 +237,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, provide, ref, computed, reactive, watch } from 'vue';
+import { defineComponent, provide, ref, computed, watch } from 'vue';
 import EssentialLink from 'components/EssentialLink.vue';
 import { useRouter } from 'vue-router';
 
@@ -315,11 +297,34 @@ export default defineComponent({
     const agenceDrop = ref(false);
     const router = useRouter();
     const backgroundImages = [
-      { url: 'src/assets/img/background/default.png', active: true },
-      { url: 'src/assets/img/background/accueil.png', active: false },
-      { url: 'src/assets/img/background/chiffre.png', active: false },
-      { url: 'src/assets/img/background/contact.png', active: false },
+      {
+        url: new URL('../assets/img/background/default.png', import.meta.url)
+          .href,
+        active: true,
+      },
+      {
+        url: new URL('../assets/img/background/accueil.png', import.meta.url)
+          .href,
+        active: false,
+      },
+      {
+        url: new URL('../assets/img/background/chiffre.png', import.meta.url)
+          .href,
+        active: false,
+      },
+      {
+        url: new URL('../assets/img/background/contact.png', import.meta.url)
+          .href,
+        active: false,
+      },
     ];
+
+    const middleO = ref(
+      new URL('../assets/img/navbar/middle_o.png', import.meta.url).href
+    );
+    const middleF = ref(
+      new URL('../assets/img/navbar/middle_f.png', import.meta.url).href
+    );
     const backgroundUrlIndex = ref(0);
     provide('bg-key', backgroundUrlIndex);
 
@@ -391,7 +396,8 @@ export default defineComponent({
       agenceDrop,
       header,
       headerIndex,
-
+      middleO,
+      middleF,
       goPage,
     };
   },
@@ -492,7 +498,7 @@ export default defineComponent({
   // transition: background-image 1s ease-in-out;
 }
 .accueil {
-  background-image: url('assets/img/background/acceuil.png');
+  background-image: url('assets/img/background/accueil.png');
 }
 .chiffre {
   background-image: url('assets/img/background/chiffre.png');

@@ -9,7 +9,7 @@
           </div>
           <q-img
             alt="Atlas - Agence de social média marketing et d'influence"
-            src="src/assets/img/circle_expert.png"
+            src="../assets/img/circle_expert.png"
             width="18vw"
             class="project-btn"
             @click="goToTeam()"

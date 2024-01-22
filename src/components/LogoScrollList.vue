@@ -9,8 +9,7 @@
         <img
           v-for="(logo, index) in duplicatedLogos"
           :src="
-            'src/assets/img/project/' +
-            (selectedLogoIndex === index ? logosel[index] : logo)
+            getImageUrl(selectedLogoIndex === index ? logosel[index] : logo)
           "
           :key="index"
           :alt="`Logo ${index + 1}`"
@@ -174,6 +173,10 @@ export default {
     //   }
     // );
 
+    const getImageUrl = (name) => {
+      return new URL(`../assets/img/project/${name}`, import.meta.url).href;
+    };
+
     return {
       duplicatedLogos,
       logoWindow,
@@ -183,6 +186,7 @@ export default {
       isRightEnd,
       selectLogo,
       selectedLogoIndex,
+      getImageUrl,
     };
   },
 };

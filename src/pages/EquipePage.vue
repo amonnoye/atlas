@@ -16,7 +16,7 @@
         </div>
         <q-img
           alt="Atlas - Agence de social média marketing et d'influence"
-          src="src/assets/img/circle.png"
+          src="../assets/img/circle.png"
           width="15vw"
           class="project-btn"
           @click="goToChiffre()"
@@ -53,7 +53,7 @@
               <q-card class="my-card">
                 <div style="width: 70%">
                   <q-img
-                    :src="'src/assets/img/team/' + member.image"
+                    :src="getImageUrl(member.image)"
                     style="background-color: transparent"
                   />
                 </div>
@@ -138,12 +138,15 @@ export default {
     function goToChiffre() {
       const navigationResult = router.push({ name: 'chiffre' });
     }
-
+    const getImageUrl = (name) => {
+      return new URL(`../assets/img/team/${name}`, import.meta.url).href;
+    };
     return {
       slide,
       valeur,
       teamMembers,
       goToChiffre,
+      getImageUrl,
     };
   },
 };

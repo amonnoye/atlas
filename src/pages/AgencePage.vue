@@ -11,7 +11,7 @@
         </div>
         <q-img
           alt="Atlas - Agence de social média marketing et d'influence"
-          src="src/assets/img/circle.png"
+          src="../assets/img/circle.png"
           width="15vw"
           class="project-btn"
           @click="goToChiffre()"

@@ -3,14 +3,14 @@
     <div class="img-container">
       <q-img
         alt="Atlas - Agence de social média marketing et d'influence"
-        src="src/assets/img/logo/logo_atlas.png"
+        src="../assets/img/logo/logo_atlas.png"
         width="55vw"
         class="atlas-logo"
       >
       </q-img>
       <q-img
         alt="Atlas - Agence de social média marketing et d'influence"
-        src="src/assets/img/circle.png"
+        src="../assets/img/circle.png"
         width="15vw"
         class="project-btn"
         @click="gotoProject"

@@ -10,8 +10,19 @@
       </div>
       <div style="font-size: 1.7vw; margin-bottom: 3vh">14000 Caen</div>
       <div style="font-size: 1.7vw">09 72 91 32 28</div>
-      <div class="social-media">
-        <!-- Icônes des réseaux sociaux ici -->
+      <div class="social-media row">
+        <q-btn flat dense label="" class="q-ml-lg q-pt-lg">
+          <img src="../assets/img/logo/twitter-64.png" width="15" />
+        </q-btn>
+        <q-btn flat dense label="" class="q-ml-sm q-pt-lg">
+          <img src="../assets/img/logo/facebook.png" width="7" />
+        </q-btn>
+        <q-btn flat dense label="" class="q-ml-sm q-pt-lg">
+          <img src="../assets/img/logo/instagram.png" width="15" />
+        </q-btn>
+        <q-btn flat dense label="" class="q-ml-sm q-pt-lg">
+          <img src="../assets/img/logo/youtube.png" width="15" />
+        </q-btn>
       </div>
     </div>
     <div class="contact-form">
@@ -149,6 +160,12 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.social-media {
+  // max-width: 40%;
+  display: flex;
+  align-items: flex-start;
+  // justify-content: space-evenly;
+}
 .custom-input {
   margin-bottom: 2.5vh;
 }
