@@ -74,9 +74,12 @@
 <script>
 import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { api } from 'boot/axios';
+import { useQuasar } from 'quasar';
 export default {
   components: {},
   setup() {
+    const $q = useQuasar();
     const router = useRouter();
     const background = inject('bg-key');
     background.value = 0;
@@ -87,30 +90,33 @@ export default {
     const header = inject('header-key');
     header.value = 1;
     const slide = ref(0);
-    const valeur = [
+    const valeur = ref([
       {
         id: 0,
         title: 'Éloquence',
         text: "Mais nous ne parlons pas pour ne rien dire, Lorsque Atlas prend la parole c'est qu'il y a un intérêt et que c'est pertinent pour votre marque.",
       },
-      {
-        id: 1,
-        title: 'Éloquence2',
-        text: "Mais nous ne parlons pas pour ne rien dire, Lorsque Atlas prend la parole c'est qu'il y a un intérêt et que c'est pertinent pour votre marque.",
-      },
-      {
-        id: 2,
-        title: 'Éloquence3',
-        text: "Mais nous ne parlons pas pour ne rien dire, Lorsque Atlas prend la parole c'est qu'il y a un intérêt et que c'est pertinent pour votre marque.",
-      },
-      {
-        id: 3,
-        title: 'Éloquence4',
-        text: "Mais nous ne parlons pas pour ne rien dire, Lorsque Atlas prend la parole c'est qu'il y a un intérêt et que c'est pertinent pour votre marque.",
-      },
-    ];
-    console.log(valeur);
+    ]);
+    // console.log(valeur);
 
+    const data = ref();
+    function loadData() {
+      api
+        .get('https://dev2.agence-atlas.fr/api/team')
+        .then((response) => {
+          data.value = response.data;
+          console.log(data.value);
+          //valeur.value = [];
+          for (let index = 0; index < data.value.length; index++) {
+            const element = data.value[index];
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          $q.notify('Message');
+        });
+    }
+    loadData();
     const teamMembers = [
       {
         name: 'Evan Raphalen',

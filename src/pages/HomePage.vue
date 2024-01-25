@@ -28,12 +28,14 @@
 <script>
 import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { api } from 'boot/axios';
+import { useQuasar } from 'quasar';
 
 export default {
   components: {},
   setup() {
     const router = useRouter();
-
+    const $q = useQuasar();
     const background = inject('bg-key');
     background.value = 1;
     const nav = inject('nav-key');
@@ -45,6 +47,18 @@ export default {
     function gotoProject() {
       const navigationResult = router.push({ name: 'projects' });
     }
+
+    // api
+    //   .get('http://dev2.agence-atlas.fr/api/team') // This will work
+    //   .then(function (response) {
+    //     if (response.data.error) {
+    //       this.errorMsg = response.data.message;
+    //     } else {
+    //       this.projects = response.data.projects;
+    //     }
+    //   });
+
+    //loadData();
 
     return {
       gotoProject,
