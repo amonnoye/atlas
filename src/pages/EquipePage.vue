@@ -49,18 +49,26 @@
           v-bind:key="val.id"
         >
           <div class="row q-my-lg">
-            <div class="col" v-for="member in teamMembers" :key="member.name">
-              <q-card class="my-card">
+            <div class="col" v-for="num in [1, 2, 3]" :key="num">
+              <q-card class="my-card" v-if="val[`item${num}`] !== undefined">
                 <div style="width: 70%">
                   <q-img
-                    :src="getImageUrl(member.image)"
+                    :src="getImageUrl(val[`item${num}`].picture)"
                     style="background-color: transparent"
                   />
                 </div>
                 <q-card-section style="border: none">
-                  <div class="team-name">{{ member.name }}</div>
-                  <div class="team-title">{{ member.role }}</div>
-                  <div class="team-text-caption">{{ member.description }}</div>
+                  <div class="team-name">
+                    {{
+                      val[`item${num}`].prenom.toLowerCase() +
+                      ' ' +
+                      val[`item${num}`].nom.toLowerCase()
+                    }}
+                  </div>
+                  <div class="team-title">{{ val[`item${num}`].poste }}</div>
+                  <div class="team-text-caption">
+                    {{ val[`item${num}`].resum }}
+                  </div>
                 </q-card-section>
               </q-card>
             </div>
@@ -90,13 +98,7 @@ export default {
     const header = inject('header-key');
     header.value = 1;
     const slide = ref(0);
-    const valeur = ref([
-      {
-        id: 0,
-        title: 'Éloquence',
-        text: "Mais nous ne parlons pas pour ne rien dire, Lorsque Atlas prend la parole c'est qu'il y a un intérêt et que c'est pertinent pour votre marque.",
-      },
-    ]);
+    const valeur = ref([]);
     // console.log(valeur);
 
     const data = ref();
@@ -105,15 +107,30 @@ export default {
         .get('https://dev2.agence-atlas.fr/api/team')
         .then((response) => {
           data.value = response.data;
-          console.log(data.value);
-          //valeur.value = [];
+          valeur.value = [];
+          let row = {};
+          let itemCount = 0;
+          let rowIndex = 0;
+          row['id'] = rowIndex;
+          console.log(valeur.value);
           for (let index = 0; index < data.value.length; index++) {
             const element = data.value[index];
+            itemCount++;
+            row[`item${itemCount}`] = element;
+
+            if (itemCount === 3 || index === data.value.length - 1) {
+              console.log(row);
+              valeur.value.push(row);
+              row = {};
+              row['id'] = ++rowIndex;
+              itemCount = 0;
+            }
           }
+          console.log(valeur.value);
         })
         .catch((error) => {
           console.log(error);
-          $q.notify('Message');
+          $q.notify('Une erreur s"est produite"');
         });
     }
     loadData();
@@ -147,12 +164,27 @@ export default {
     const getImageUrl = (name) => {
       return new URL(`../assets/img/team/${name}`, import.meta.url).href;
     };
+
+    function getImage(name) {
+      api
+        .get('https://dev2.agence-atlas.fr/api/media/' + name)
+        .then((response) => {
+          // Retourner l'URL de l'image
+          return response.data.url; // Assurez-vous que c'est le bon chemin pour l'URL dans la réponse de votre API
+        })
+        .catch((error) => {
+          console.log(error);
+          $q.notify('Une erreur s"est produite"');
+          return ''; // Retourner une chaîne vide ou une URL d'image par défaut en cas d'erreur
+        });
+    }
     return {
       slide,
       valeur,
       teamMembers,
       goToChiffre,
       getImageUrl,
+      getImage,
     };
   },
 };
@@ -188,7 +220,7 @@ export default {
 
 .carroussel-container {
   position: absolute;
-  width: 50%;
+  width: 62%;
   top: 40%;
   margin-left: 9vw;
   background-color: transparent;
@@ -227,6 +259,7 @@ export default {
 
 .team-name {
   font-size: 1.5vw;
+  text-transform: capitalize;
 }
 
 .team-title {
