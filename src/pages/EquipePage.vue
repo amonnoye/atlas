@@ -35,11 +35,11 @@
         swipeable
         infinite
         animated
-        autoplay
         control-color="white"
         arrows
+        autoplay
         padding
-        height="50vh"
+        height="55vh"
         class="bg-transparent text-white rounded-borders"
       >
         <q-carousel-slide
@@ -53,7 +53,7 @@
               <q-card class="my-card" v-if="val[`item${num}`] !== undefined">
                 <div style="width: 70%">
                   <q-img
-                    :src="getImageUrl(val[`item${num}`].picture)"
+                    :src="getImage(val[`item${num}`].picture)"
                     style="background-color: transparent"
                   />
                 </div>
@@ -84,6 +84,7 @@ import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { api } from 'boot/axios';
 import { useQuasar } from 'quasar';
+
 export default {
   components: {},
   setup() {
@@ -166,17 +167,7 @@ export default {
     };
 
     function getImage(name) {
-      api
-        .get('https://dev2.agence-atlas.fr/api/media/' + name)
-        .then((response) => {
-          // Retourner l'URL de l'image
-          return response.data.url; // Assurez-vous que c'est le bon chemin pour l'URL dans la réponse de votre API
-        })
-        .catch((error) => {
-          console.log(error);
-          $q.notify('Une erreur s"est produite"');
-          return ''; // Retourner une chaîne vide ou une URL d'image par défaut en cas d'erreur
-        });
+      return 'https://dev2.agence-atlas.fr/api/media/' + name;
     }
     return {
       slide,

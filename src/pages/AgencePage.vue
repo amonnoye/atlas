@@ -39,7 +39,7 @@
         navigation
         navigation-position="left"
         padding
-        height="25vh"
+        height="45vh"
         class="bg-transparent text-white rounded-borders"
       >
         <template v-slot:navigation-icon="{ active, btnProps, onClick }">
@@ -72,7 +72,7 @@
           v-bind:key="val.id"
         >
           <div class="q-mt-md val-title">{{ val.title }}</div>
-          <div class="q-mt-md val-text">{{ val.text }}</div>
+          <div class="q-mt-md val-text">{{ val.texte }}</div>
         </q-carousel-slide>
       </q-carousel>
     </div>
@@ -82,6 +82,7 @@
 <script>
 import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { api } from 'src/boot/axios';
 
 export default {
   components: {},
@@ -97,30 +98,24 @@ export default {
     const header = inject('header-key');
     header.value = 1;
 
-    const valeur = [
-      {
-        id: 0,
-        title: 'Éloquence',
-        text: "Mais nous ne parlons pas pour ne rien dire, Lorsque Atlas prend la parole c'est qu'il y a un intérêt et que c'est pertinent pour votre marque.",
-      },
-      {
-        id: 1,
-        title: 'Éloquence2',
-        text: "Mais nous ne parlons pas pour ne rien dire, Lorsque Atlas prend la parole c'est qu'il y a un intérêt et que c'est pertinent pour votre marque.",
-      },
-      {
-        id: 2,
-        title: 'Éloquence3',
-        text: "Mais nous ne parlons pas pour ne rien dire, Lorsque Atlas prend la parole c'est qu'il y a un intérêt et que c'est pertinent pour votre marque.",
-      },
-      {
-        id: 3,
-        title: 'Éloquence4',
-        text: "Mais nous ne parlons pas pour ne rien dire, Lorsque Atlas prend la parole c'est qu'il y a un intérêt et que c'est pertinent pour votre marque.",
-      },
-    ];
-    console.log(valeur);
+    const valeur = ref([]);
+    // console.log(valeur);
 
+    const data = ref();
+    function loadData() {
+      api
+        .get('https://dev2.agence-atlas.fr/api/valeurs')
+        .then((response) => {
+          data.value = response.data;
+          valeur.value = response.data;
+          console.log(valeur.value);
+        })
+        .catch((error) => {
+          console.log(error);
+          $q.notify('Une erreur s"est produite"');
+        });
+    }
+    loadData();
     function goToChiffre() {
       const navigationResult = router.push({ name: 'chiffre' });
     }
