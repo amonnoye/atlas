@@ -128,9 +128,16 @@ export default {
 };
 </script>
 
+<style lang="scss">
+.q-carousel__navigation--left > .q-carousel__navigation-inner,
+.q-carousel__navigation--right > .q-carousel__navigation-inner {
+  justify-content: flex-start !important;
+  margin-top: 3vw;
+}
+</style>
 <style lang="scss" scoped>
 .title {
-  font-size: 4.5vh;
+  font-size: 2.7em;
   text-transform: uppercase;
   color: white;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -139,7 +146,7 @@ export default {
 }
 .subtitle {
   font-family: 'mysilk';
-  font-size: 6vh;
+  font-size: 3vmax;
   text-transform: uppercase;
   color: white;
   // font-weight: 100;
@@ -170,7 +177,7 @@ export default {
   font-size: 2.6vw;
 }
 .val-text {
-  font-size: 1vw;
+  font-size: 1vmax;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 100;
   overflow-wrap: break-word;

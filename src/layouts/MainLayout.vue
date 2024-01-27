@@ -114,6 +114,7 @@
         />
         <q-btn flat dense label="" class="q-ml-lg q-pt-lg">
           <img src="../assets/img/logo/facebook.png" />
+          {{ data[0].link_fb }}
         </q-btn>
         <q-btn flat dense label="" class="q-ml-sm q-pt-lg">
           <img src="../assets/img/logo/instagram.png" />
@@ -240,51 +241,21 @@
 import { defineComponent, provide, ref, computed, watch } from 'vue';
 import EssentialLink from 'components/EssentialLink.vue';
 import { useRouter } from 'vue-router';
+import { api } from 'src/boot/axios';
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev',
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework',
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev',
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev',
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev',
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
-  },
-];
+const data = ref();
+function loadData() {
+  api
+    .get('https://dev2.agence-atlas.fr/api/baseinfo')
+    .then((response) => {
+      data.value = response.data;
+      console.log(data.value);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+loadData();
 
 export default defineComponent({
   name: 'MainLayout',
@@ -399,6 +370,7 @@ export default defineComponent({
       middleO,
       middleF,
       goPage,
+      data,
     };
   },
 });
