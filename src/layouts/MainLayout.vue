@@ -112,14 +112,34 @@
           class="header-link q-pt-lg"
           :class="headerIndex == 3 ? 'header-active' : ''"
         />
-        <q-btn flat dense label="" class="q-ml-lg q-pt-lg">
+        <q-btn
+          flat
+          dense
+          label=""
+          class="q-ml-lg q-pt-lg"
+          :href="link_fb"
+          target="_blank"
+        >
           <img src="../assets/img/logo/facebook.png" />
-          {{ data[0].link_fb }}
         </q-btn>
-        <q-btn flat dense label="" class="q-ml-sm q-pt-lg">
+        <q-btn
+          flat
+          dense
+          label=""
+          class="q-ml-sm q-pt-lg"
+          :href="link_insta"
+          target="_blank"
+        >
           <img src="../assets/img/logo/instagram.png" />
         </q-btn>
-        <q-btn flat dense label="" class="q-ml-sm q-mr-lg q-pt-lg">
+        <q-btn
+          flat
+          dense
+          label=""
+          class="q-ml-sm q-mr-lg q-pt-lg"
+          :href="link_lkd"
+          target="_blank"
+        >
           <img src="../assets/img/logo/linkedin.png" />
         </q-btn>
       </q-toolbar>
@@ -201,13 +221,33 @@
             <div class="col-8 bg-project"></div>
           </div>
         </div>
-        <q-btn flat dense class="q-mr-md q-ml-md q-mb-md q-mt-ml" label="">
+        <q-btn
+          flat
+          dense
+          class="q-mr-md q-ml-md q-mb-md q-mt-ml"
+          :href="link_asg"
+          target="_blank"
+        >
           <img src="../assets/img/logo/asgard_logo.png" />
         </q-btn>
-        <q-btn flat dense label="" class="q-mr-md q-mb-md">
+        <q-btn
+          flat
+          dense
+          label=""
+          class="q-mr-md q-mb-md"
+          :href="link_argos"
+          target="_blank"
+        >
           <img src="../assets/img/logo/argos_logo.png" />
         </q-btn>
-        <q-btn flat dense label="" class="q-mr-md q-mb-md">
+        <q-btn
+          flat
+          dense
+          label=""
+          class="q-mr-md q-mb-md"
+          :href="link_abyss"
+          target="_blank"
+        >
           <img src="../assets/img/logo/abyss_logo.png" />
         </q-btn>
         <q-space />
@@ -238,24 +278,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, provide, ref, computed, watch } from 'vue';
+import {
+  defineComponent,
+  provide,
+  ref,
+  computed,
+  watch,
+  onBeforeMount,
+} from 'vue';
 import EssentialLink from 'components/EssentialLink.vue';
 import { useRouter } from 'vue-router';
 import { api } from 'src/boot/axios';
-
-const data = ref();
-function loadData() {
-  api
-    .get('https://dev2.agence-atlas.fr/api/baseinfo')
-    .then((response) => {
-      data.value = response.data;
-      console.log(data.value);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-loadData();
 
 export default defineComponent({
   name: 'MainLayout',
@@ -341,6 +374,35 @@ export default defineComponent({
       }
     }
 
+    const data = ref();
+    const link_fb = ref('');
+    const link_insta = ref('');
+    const link_lkd = ref('');
+    const link_asg = ref('');
+    const link_argos = ref('');
+    const link_abyss = ref('');
+    function loadData() {
+      api
+        .get('https://dev2.agence-atlas.fr/api/baseinfo')
+        .then((response) => {
+          data.value = response.data[0];
+          link_fb.value = data.value.link_fb;
+          link_insta.value = data.value.link_insta;
+          link_lkd.value = data.value.link_lkd;
+          link_asg.value = data.value.link_asg;
+          link_abyss.value = data.value.link_abyss;
+          link_argos.value = data.value.link_argos;
+          console.log(data.value);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    onBeforeMount(() => {
+      loadData();
+    });
+
     const pageList = ['home', 'agence', 'expertise'];
 
     function goPage(index) {
@@ -371,6 +433,12 @@ export default defineComponent({
       middleF,
       goPage,
       data,
+      link_fb,
+      link_insta,
+      link_lkd,
+      link_asg,
+      link_abyss,
+      link_argos,
     };
   },
 });
