@@ -3,7 +3,7 @@
     <div class="contact-info">
       <div style="font-size: 3.5vw; margin-bottom: 2vh">Contact</div>
       <div style="font-size: 1.7vw; margin-bottom: 5vh">
-        contact@agence-atlas.fr
+        <a href="mailto:contact@agence-atlas.fr">contact@agence-atlas.fr</a>
       </div>
       <div style="font-size: 1.7vw; line-height: 2vh">
         147 rue de la Délivrande
@@ -11,16 +11,44 @@
       <div style="font-size: 1.7vw; margin-bottom: 3vh">14000 Caen</div>
       <div style="font-size: 1.7vw">09 72 91 32 28</div>
       <div class="social-media row">
-        <q-btn flat dense label="" class="q-ml-lg q-pt-lg">
+        <q-btn
+          flat
+          dense
+          label=""
+          class="q-ml-lg q-pt-lg"
+          :href="link.link_twitter"
+          target="_blank"
+        >
           <img src="../assets/img/logo/twitter-64.png" width="15" />
         </q-btn>
-        <q-btn flat dense label="" class="q-ml-sm q-pt-lg">
+        <q-btn
+          flat
+          dense
+          label=""
+          class="q-ml-sm q-pt-lg"
+          :href="link.link_fb"
+          target="_blank"
+        >
           <img src="../assets/img/logo/facebook.png" width="7" />
         </q-btn>
-        <q-btn flat dense label="" class="q-ml-sm q-pt-lg">
+        <q-btn
+          flat
+          dense
+          label=""
+          class="q-ml-sm q-pt-lg"
+          :href="link.link_insta"
+          target="_blank"
+        >
           <img src="../assets/img/logo/instagram.png" width="15" />
         </q-btn>
-        <q-btn flat dense label="" class="q-ml-sm q-pt-lg">
+        <q-btn
+          flat
+          dense
+          label=""
+          class="q-ml-sm q-pt-lg"
+          :href="link.link_youtube"
+          target="_blank"
+        >
           <img src="../assets/img/logo/youtube.png" width="15" />
         </q-btn>
       </div>
@@ -99,6 +127,7 @@
 
 <script>
 import { inject, ref } from 'vue';
+import { api } from 'src/boot/axios';
 
 export default {
   components: {},
@@ -120,9 +149,26 @@ export default {
       termsAccepted: false,
     });
 
+    const link = inject('link-ext');
+    console.log(link);
     function submitForm() {
       // Logique pour traiter la soumission du formulaire
       console.log(form.value);
+      let formData = new URLSearchParams();
+      formData.append('name', form.value.name);
+      formData.append('email', form.value.email);
+      formData.append('message', form.value.message);
+      formData.append('subject', form.value.subject);
+      api
+        .post('/contact', formData)
+        .then((response) => {
+          // Gérez la réponse ici, par exemple en affichant un message de succès
+          console.log('Succès :', response.data, formData);
+        })
+        .catch((error) => {
+          // Gérez les erreurs ici
+          console.error('Erreur :', error);
+        });
       // Ici, vous pouvez envoyer les données du formulaire à un serveur
     }
 
@@ -142,6 +188,7 @@ export default {
       submitForm,
       form,
       onReset,
+      link,
     };
   },
 };
@@ -160,6 +207,11 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+a {
+  color: inherit; /* ou toute autre couleur souhaitée */
+  text-decoration: none; /* optionnel, pour enlever le soulignement */
+  /* autres styles si nécessaire */
+}
 .social-media {
   // max-width: 40%;
   display: flex;

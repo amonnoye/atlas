@@ -285,6 +285,7 @@ import {
   computed,
   watch,
   onBeforeMount,
+  reactive,
 } from 'vue';
 import EssentialLink from 'components/EssentialLink.vue';
 import { useRouter } from 'vue-router';
@@ -381,23 +382,39 @@ export default defineComponent({
     const link_asg = ref('');
     const link_argos = ref('');
     const link_abyss = ref('');
+    const link_twitter = ref('');
+    const link_youtube = ref('');
+    const link = reactive({
+      link_fb: link_fb.value,
+      link_insta: link_insta.value,
+      link_lkd: link_lkd.value,
+      link_asg: link_asg.value,
+      link_abyss: link_abyss.value,
+      link_argos: link_argos.value,
+      link_twitter: link_twitter.value,
+      link_youtube: link_youtube.value,
+    });
     function loadData() {
       api
         .get('https://dev2.agence-atlas.fr/api/baseinfo')
         .then((response) => {
           data.value = response.data[0];
-          link_fb.value = data.value.link_fb;
-          link_insta.value = data.value.link_insta;
-          link_lkd.value = data.value.link_lkd;
-          link_asg.value = data.value.link_asg;
-          link_abyss.value = data.value.link_abyss;
-          link_argos.value = data.value.link_argos;
+          link.link_fb = link_fb.value = data.value.link_fb;
+          link.link_insta = link_insta.value = data.value.link_insta;
+          link.link_lkd = link_lkd.value = data.value.link_lkd;
+          link.link_asg = link_asg.value = data.value.link_asg;
+          link.link_abyss = link_abyss.value = data.value.link_abyss;
+          link.link_argos = link_argos.value = data.value.link_argos;
+          link.link_twitter = link_twitter.value = data.value.link_twitter;
+          link.link_youtube = link_youtube.value = data.value.link_youtube;
           console.log(data.value);
         })
         .catch((error) => {
           console.log(error);
         });
     }
+
+    provide('link-ext', link);
 
     onBeforeMount(() => {
       loadData();
