@@ -128,10 +128,12 @@
 <script>
 import { inject, ref } from 'vue';
 import { api } from 'src/boot/axios';
+import { useQuasar } from 'quasar';
 
 export default {
   components: {},
   setup() {
+    const $q = useQuasar();
     const background = inject('bg-key');
     background.value = 3;
 
@@ -158,12 +160,25 @@ export default {
       formData.append('name', form.value.name);
       formData.append('email', form.value.email);
       formData.append('message', form.value.message);
+      formData.append('firstName', form.value.firstName);
       formData.append('subject', form.value.subject);
       api
         .post('/contact', formData)
         .then((response) => {
           // Gérez la réponse ici, par exemple en affichant un message de succès
           console.log('Succès :', response.data, formData);
+
+          if (response.data['success']) {
+            console.log(response.data['success']);
+            $q.notify({
+              message: 'Message envoyé avec succés!',
+              color: 'accent',
+              textColor: 'white',
+              position: 'center',
+              progress: true,
+            });
+            onReset();
+          }
         })
         .catch((error) => {
           // Gérez les erreurs ici
