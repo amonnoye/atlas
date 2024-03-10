@@ -303,22 +303,22 @@ export default defineComponent({
     const router = useRouter();
     const backgroundImages = [
       {
-        url: new URL('../assets/img/background/default.png', import.meta.url)
+        url: new URL('../assets/img/background/default.webp', import.meta.url)
           .href,
         active: true,
       },
       {
-        url: new URL('../assets/img/background/accueil.png', import.meta.url)
+        url: new URL('../assets/img/background/accueil.webp', import.meta.url)
           .href,
         active: false,
       },
       {
-        url: new URL('../assets/img/background/chiffre.png', import.meta.url)
+        url: new URL('../assets/img/background/chiffre.webp', import.meta.url)
           .href,
         active: false,
       },
       {
-        url: new URL('../assets/img/background/contact.png', import.meta.url)
+        url: new URL('../assets/img/background/contact.webp', import.meta.url)
           .href,
         active: false,
       },
@@ -555,21 +555,21 @@ export default defineComponent({
   // transition: background-image 1s ease-in-out;
 }
 .accueil {
-  background-image: url('assets/img/background/accueil.png');
+  background-image: url('assets/img/background/accueil.webp');
 }
 .chiffre {
-  background-image: url('assets/img/background/chiffre.png');
+  background-image: url('assets/img/background/chiffre.webp');
 }
 .contact {
-  background-image: url('assets/img/background/contact.png');
+  background-image: url('assets/img/background/contact.webp');
 }
 .default {
-  background-image: url('assets/img/background/default.png');
+  background-image: url('assets/img/background/default.webp');
 }
 
 .gome {
   position: relative; // For absolute positioning of child elements
-  background-color: rgb(255, 255, 255);
+  background-color: $accent;
   background-size: cover; // Cover the entire background
   background-position: center; // Center the background image
   background-repeat: no-repeat; // Do not repeat the image
