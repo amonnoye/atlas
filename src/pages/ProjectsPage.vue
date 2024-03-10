@@ -18,6 +18,7 @@
             :logosel="sellogos"
             class="logo-scroll-list"
           />
+          <div></div>
         </div>
       </div>
     </div>

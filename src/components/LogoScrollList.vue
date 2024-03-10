@@ -56,37 +56,46 @@ export default {
       );
     });
 
-    // function selectLogo(index) {
-    //   selectedLogoIndex.value = index;
-
-    //   // Calculez et ajustez la position pour centrer le logo
-    //   const logosBeforeSelected = index;
-    //   const offset = logosBeforeSelected * logoWidth.value;
-    //   const halfWindowWidth = logoWindow.value.offsetWidth / 2;
-    //   const logoHalfWidth = logoWidth.value / 2;
-    //   scrollPosition.value = Math.max(
-    //     offset + logoHalfWidth - halfWindowWidth,
-    //     0
-    //   );
-    // }
-
     function selectLogo(index) {
       selectedLogoIndex.value = index % props.logos.length;
-      let targetIndex = index;
+      console.log(selectedLogoIndex.value);
 
-      // Si le logo sélectionné est dans la deuxième moitié des logos dupliqués
-      if (index >= props.logos.length) {
-        targetIndex = index - props.logos.length;
-      }
+      // S'assurer que le DOM est à jour avant de calculer les positions
+      nextTick().then(() => {
+        console.log('qsdqsd');
+        let targetIndex = index;
+        if (index >= props.logos.length) {
+          targetIndex = index - props.logos.length;
+        }
+        if (logoWindow.value) {
+          console.log(scrollPosition.value);
+          const halfWindowWidth = logoWindow.value.offsetWidth / 2;
+          const logoHalfWidth = logoWidth.value / 2;
+          const centerPosition =
+            index * logoWidth.value + logoHalfWidth - halfWindowWidth;
 
-      // Calculez et ajustez la position pour centrer le logo
-      const offset = targetIndex * logoWidth.value;
-      const halfWindowWidth = logoWindow.value.offsetWidth / 2;
-      const logoHalfWidth = logoWidth.value / 2;
-      scrollPosition.value = Math.max(
-        offset + logoHalfWidth - halfWindowWidth,
-        0
-      );
+          scrollPosition.value = Math.max(centerPosition, 0);
+          console.log(scrollPosition.value);
+          // Ajustez si le défilement dépasse la fin de la liste des logos
+          const maxScrollPosition =
+            duplicatedLogos.length * logoWidth.value -
+            logoWindow.value.offsetWidth;
+
+          console.log(
+            maxScrollPosition +
+              ' ' +
+              scrollPosition.value +
+              ' ' +
+              centerPosition
+          );
+
+          if (scrollPosition.value > maxScrollPosition) {
+            scrollPosition.value = maxScrollPosition;
+          }
+
+          // Si le logo sélectionné est dans la deuxième moitié des logos dupliqués
+        }
+      });
     }
 
     onMounted(() => {
@@ -212,9 +221,10 @@ export default {
   /* width en pourcentage pour une largeur réactive */
   width: calc(
     100vw / 8 - 2vw
-  ) !important; /* Ici, 8 est le nombre de logos visibles et 2vw est l'espacement total à droite */
+  ) !important; /*Ici, 8 est le nombre de logos visibles et 2vw est l'espacement total à droite */
   /*height: auto !important;*/
   margin-right: 2vw; /* Espace entre les logos */
+  object-fit: contain;
 }
 .selected-logo {
   /* border: 2px solid #c5a0d3; /* Style pour le logo sélectionné */
