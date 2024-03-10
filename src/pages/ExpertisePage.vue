@@ -109,7 +109,7 @@ export default {
 .project-btn {
   position: absolute;
   top: 8%;
-  left: 91%;
+  left: 94%;
   font-size: 3vw;
   z-index: 1;
 }
