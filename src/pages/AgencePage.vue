@@ -25,7 +25,7 @@
         </q-img>
       </div>
     </div>
-    <div class="carroussel-container">
+    <div class="carroussel-container" v-if="valeur && valeur.length > 0">
       <q-carousel
         v-model="slide"
         transition-prev="slide-down"
@@ -108,6 +108,10 @@ export default {
         .then((response) => {
           data.value = response.data;
           valeur.value = response.data;
+          if (valeur.value.length > 0) {
+            slide.value = valeur.value[0].id;
+          }
+
           console.log(valeur.value);
         })
         .catch((error) => {
