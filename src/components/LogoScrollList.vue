@@ -55,7 +55,7 @@ export default {
     });
 
     function getImage(name) {
-      return 'http://dev2.agence-atlas.fr/api/media/' + name;
+      return 'http://dev2.agence-atlas.fr/api/medial/' + name;
     }
 
     function selectLogo(index) {
