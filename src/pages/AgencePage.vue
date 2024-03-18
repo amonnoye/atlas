@@ -104,7 +104,7 @@ export default {
     const data = ref();
     function loadData() {
       api
-        .get('https://dev2.agence-atlas.fr/api/valeurs')
+        .get('/valeurs')
         .then((response) => {
           data.value = response.data;
           valeur.value = response.data;

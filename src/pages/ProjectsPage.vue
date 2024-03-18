@@ -14,6 +14,7 @@
         </div>
         <div class="col-8 project-view">
           <logo-scroll-list
+            v-if="logos.length > 0"
             :logos="logos"
             :logosel="sellogos"
             class="logo-scroll-list"
@@ -28,8 +29,11 @@
 <script>
 import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
+import { api } from 'src/boot/axios';
+import { useQuasar } from 'quasar';
 import QImgGallery from 'components/QImgGallery.vue'; // Assurez-vous d'avoir ce composant ou utilisez une alternative
 import LogoScrollList from 'src/components/LogoScrollList.vue';
+import { Project } from 'src/components/project';
 
 export default {
   components: {
@@ -38,6 +42,7 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const $q = useQuasar();
     const background = inject('bg-key');
     background.value = 0;
 
@@ -62,17 +67,17 @@ export default {
         ' votre marque...'
     );
 
-    const logos = [
-      'isigny.png',
-      'fromage_aop.png',
-      'sdn.png',
-      'cnaol.png',
-      'huitre.png',
-      'livarot.png',
-      'pontleveque.png',
-      'viande.png',
+    const logos = ref([
+      // 'isigny.png',
+      // 'fromage_aop.png',
+      // 'sdn.png',
+      // 'cnaol.png',
+      // 'huitre.png',
+      // 'livarot.png',
+      // 'pontleveque.png',
+      // 'viande.png',
       // Ajoutez plus de chemins vers les logos de vos clients
-    ];
+    ]);
 
     const sellogos = [
       'isigny_s.png',
@@ -85,6 +90,7 @@ export default {
       'viande_s.png',
       // Ajoutez plus de chemins vers les logos de vos clients
     ];
+    const project = ref([]);
 
     const galleryImages = [
       {
@@ -94,6 +100,35 @@ export default {
       },
       // Ajoutez plus d'objets pour les images de votre galerie
     ];
+
+    const data = ref();
+    function loadData() {
+      api
+        .get('/project')
+        .then((response) => {
+          data.value = response.data;
+          const valeur = ref();
+          valeur.value = [];
+          let row = {};
+          let itemCount = 0;
+          let rowIndex = 0;
+          row['id'] = rowIndex;
+          console.log(project.value);
+          project.value = data.value.map((item) => {
+            const projectInstance = new Project(item);
+            logos.value.push(projectInstance.img_logo); // Utilisez ici la propriété appropriée pour les logos
+            // sellogos.value.push(projectInstance.id_instagram); // Assumant que sellogos utilise id_instagram
+            return projectInstance;
+          });
+          console.log(project.value);
+          console.log(logos.value);
+        })
+        .catch((error) => {
+          console.log(error);
+          $q.notify('Une erreur s"est produite"');
+        });
+    }
+    loadData();
 
     return {
       slide,

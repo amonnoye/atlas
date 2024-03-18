@@ -105,7 +105,7 @@ export default {
     const data = ref();
     function loadData() {
       api
-        .get('https://dev2.agence-atlas.fr/api/team')
+        .get('/team')
         .then((response) => {
           data.value = response.data;
           valeur.value = [];
@@ -167,7 +167,7 @@ export default {
     };
 
     function getImage(name) {
-      return 'https://dev2.agence-atlas.fr/api/media/' + name;
+      return 'http://dev2.agence-atlas.fr/api/media/' + name;
     }
     return {
       slide,

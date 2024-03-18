@@ -8,9 +8,7 @@
       >
         <img
           v-for="(logo, index) in duplicatedLogos"
-          :src="
-            getImageUrl(selectedLogoIndex === index ? logosel[index] : logo)
-          "
+          :src="getImage(selectedLogoIndex === index ? logosel[index] : logo)"
           :key="index"
           :alt="`Logo ${index + 1}`"
           class="logo-item"
@@ -46,7 +44,7 @@ export default {
     const visibleCount = ref(7);
 
     // Dupliquez les logos pour le défilement infini
-    const duplicatedLogos = [...props.logos, ...props.logos];
+    const duplicatedLogos = ref([...props.logos, ...props.logos]);
 
     const isRightEnd = computed(() => {
       // Calcul de la fin de la liste basé sur le pourcentage
@@ -55,6 +53,10 @@ export default {
         ((props.logos.length - visibleCount.value) * 100) / visibleCount.value
       );
     });
+
+    function getImage(name) {
+      return 'http://dev2.agence-atlas.fr/api/media/' + name;
+    }
 
     function selectLogo(index) {
       selectedLogoIndex.value = index % props.logos.length;
@@ -78,7 +80,7 @@ export default {
           console.log(scrollPosition.value);
           // Ajustez si le défilement dépasse la fin de la liste des logos
           const maxScrollPosition =
-            duplicatedLogos.length * logoWidth.value -
+            duplicatedLogos.value.length * logoWidth.value -
             logoWindow.value.offsetWidth;
 
           console.log(
@@ -196,6 +198,7 @@ export default {
       selectLogo,
       selectedLogoIndex,
       getImageUrl,
+      getImage,
     };
   },
 };

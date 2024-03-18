@@ -422,7 +422,7 @@ export default defineComponent({
     });
     function loadData() {
       api
-        .get('https://dev2.agence-atlas.fr/api/baseinfo')
+        .get('/baseinfo')
         .then((response) => {
           data.value = response.data[0];
           link.link_fb = link_fb.value = data.value.link_fb;
@@ -433,7 +433,7 @@ export default defineComponent({
           link.link_argos = link_argos.value = data.value.link_argos;
           link.link_twitter = link_twitter.value = data.value.link_twitter;
           link.link_youtube = link_youtube.value = data.value.link_youtube;
-          console.log(data.value);
+          // console.log(data.value);
         })
         .catch((error) => {
           console.log(error);
