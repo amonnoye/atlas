@@ -12,7 +12,17 @@
       <div class="text-h3 title silkfont q-mb-xl">{{ title }}</div>
       <div class="row q-col-gutter-md" style="width: 50%">
         <div v-for="item in data" :key="item.id" class="col-auto col-sm-4">
-          <div class="text-n">{{ item.num }}</div>
+          <div class="text-n">
+            <NumberAnimation
+              :ref="item.num"
+              :from="0"
+              :to="item.num"
+              :format="theFormat"
+              :duration="1.2"
+              autoplay
+              easing="linear"
+            />
+          </div>
           <div class="text-caption" style="">
             {{ item.txt }}
           </div>
@@ -30,9 +40,12 @@
 
 <script>
 import { inject, ref } from 'vue';
+import NumberAnimation from 'vue-number-animation';
 
 export default {
-  components: {},
+  components: {
+    NumberAnimation,
+  },
   setup() {
     const background = inject('bg-key');
     background.value = 2;
@@ -47,37 +60,42 @@ export default {
     const data = ref([
       {
         id: 0,
-        num: '38',
+        num: 38,
         txt: 'Jeux concours organisés / an',
       },
       {
         id: 1,
-        num: '44',
+        num: 44,
         txt: 'Bilans\n présentés / an',
       },
       {
         id: 2,
-        num: '65',
+        num: 65,
         txt: 'Partenariats influence / an',
       },
       {
         id: 3,
-        num: '120',
+        num: 120,
         txt: 'Calendriers éditoriaux / an',
       },
       {
         id: 4,
-        num: '300',
+        num: 300,
         txt: 'Unboxings adressés / an',
       },
       {
         id: 5,
-        num: '2 000',
+        num: 2000,
         txt: 'Plus de 2 000 publications / an',
       },
     ]);
 
+    const theFormat = (value) => {
+      return Math.round(value).toString();
+    };
+
     return {
+      theFormat,
       title,
       data,
     };

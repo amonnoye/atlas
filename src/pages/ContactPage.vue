@@ -19,7 +19,11 @@
           :href="link.link_twitter"
           target="_blank"
         >
-          <img src="../assets/img/logo/twitter-64.png" width="15" />
+          <q-img
+            v-if="false"
+            src="../assets/img/logo/twitter-64.png"
+            width="15"
+          />
         </q-btn>
         <q-btn
           flat
@@ -49,7 +53,7 @@
           :href="link.link_youtube"
           target="_blank"
         >
-          <img src="../assets/img/logo/youtube.png" width="15" />
+          <v-img v-if="false" src="../assets/img/logo/youtube.png" width="15" />
         </q-btn>
       </div>
     </div>

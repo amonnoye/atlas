@@ -212,7 +212,7 @@ export default {
 .carroussel-container {
   position: absolute;
   width: 62%;
-  top: 40%;
+  top: 45%;
   margin-left: 9vw;
   background-color: transparent;
 }

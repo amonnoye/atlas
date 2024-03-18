@@ -147,9 +147,11 @@
 
     <q-page-container>
       <router-view v-slot="{ Component }">
-        <Transition name="out-in">
-          <component :is="Component" />
-        </Transition>
+        <!-- <Transition name="slide" mode="in-out"> -->
+        <!-- <CustomTransition transitionName="fade" mode="out-in"> -->
+        <component :is="Component" />
+        <!-- </Transition> -->
+        <!-- </CustomTransition> -->
       </router-view>
     </q-page-container>
 
@@ -285,9 +287,13 @@ import {
   computed,
   watch,
   onBeforeMount,
+  onMounted,
+  onBeforeUnmount,
   reactive,
 } from 'vue';
 import EssentialLink from 'components/EssentialLink.vue';
+import ScrollToTopTransition from 'components/ScrollToTopTransition.vue';
+import CustomTransition from 'components/ScrollToTopTransition.vue';
 import { useRouter } from 'vue-router';
 import { api } from 'src/boot/axios';
 
@@ -296,6 +302,8 @@ export default defineComponent({
 
   components: {
     EssentialLink,
+    ScrollToTopTransition,
+    CustomTransition,
   },
 
   setup() {
@@ -375,6 +383,24 @@ export default defineComponent({
       }
     }
 
+    const handleScroll = (event) => {
+      if ([0, 1, 2].indexOf(navbarIndex.value) !== -1) {
+        if (event.deltaY > 0) {
+          // console.log('Scrolling down');
+          navbarIndex.value++;
+          if (navbarIndex.value >= 3) navbarIndex.value = 0;
+          changeNavbar(navbarIndex.value);
+          goPage(navbarIndex.value);
+        } else {
+          // console.log('Scrolling up');
+          navbarIndex.value--;
+          if (navbarIndex.value < 0) navbarIndex.value = 2;
+          changeNavbar(navbarIndex.value);
+          goPage(navbarIndex.value);
+        }
+      }
+    };
+
     const data = ref();
     const link_fb = ref('');
     const link_insta = ref('');
@@ -402,7 +428,7 @@ export default defineComponent({
           link.link_fb = link_fb.value = data.value.link_fb;
           link.link_insta = link_insta.value = data.value.link_insta;
           link.link_lkd = link_lkd.value = data.value.link_lkd;
-          link.link_asg = link_asg.value = data.value.link_asg;
+          link.link_asg = link_asg.value = data.value.link_asgard;
           link.link_abyss = link_abyss.value = data.value.link_abyss;
           link.link_argos = link_argos.value = data.value.link_argos;
           link.link_twitter = link_twitter.value = data.value.link_twitter;
@@ -418,6 +444,14 @@ export default defineComponent({
 
     onBeforeMount(() => {
       loadData();
+    });
+
+    onMounted(() => {
+      window.addEventListener('wheel', handleScroll);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('wheel', handleScroll);
     });
 
     const pageList = ['home', 'agence', 'expertise'];
@@ -584,5 +618,44 @@ export default defineComponent({
 
 .bg-project {
   background-color: #1e024d;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.roll-enter-active,
+.roll-leave-active {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+.roll-enter-from,
+.roll-leave-to {
+  transform: rotate(90deg) scale(0);
+  opacity: 0;
+}
+.roll-enter-to,
+.roll-leave-from {
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+.slide-enter-to,
+.slide-leave-from {
+  transform: translateY(0);
+  opacity: 1;
 }
 </style>
