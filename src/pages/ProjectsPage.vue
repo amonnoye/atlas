@@ -19,7 +19,27 @@
             :logosel="sellogos"
             class="logo-scroll-list"
           />
-          <div></div>
+          <div class="row" v-if="project.length > 0">
+            <div class="col-6">
+              <q-scroll-area
+                class=""
+                style="height: 60vh; max-width: 23vw; margin-top: 5vh"
+              >
+                <h1 class="title-p">{{ project[pindex].title }}</h1>
+                <div class="intro-p">{{ project[pindex].texte_gras }}</div>
+                <div class="text-p">{{ project[pindex].texte }}</div>
+              </q-scroll-area>
+            </div>
+            <div class="col-6">
+              <div class="flex flex-center">
+                <div class="row q-gutter-xs" style="margin-top: 13vh">
+                  <div class="col-3" v-for="n in 9" :key="n">
+                    <q-skeleton animation="blink" height="13vh" width="13vh" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -27,7 +47,7 @@
 </template>
 
 <script>
-import { ref, inject } from 'vue';
+import { ref, inject, provide } from 'vue';
 import { useRouter } from 'vue-router';
 import { api } from 'src/boot/axios';
 import { useQuasar } from 'quasar';
@@ -48,7 +68,8 @@ export default {
 
     const nav = inject('nav-key');
     nav.value = 4;
-
+    const pindex = ref(0);
+    provide('pindex', pindex);
     const header = inject('header-key');
     header.value = 2;
     const slide = ref(0);
@@ -79,17 +100,17 @@ export default {
       // Ajoutez plus de chemins vers les logos de vos clients
     ]);
 
-    const sellogos = [
-      'isigny_s.png',
-      'fromage_aop_s.png',
-      'sdn_s.png',
-      'cnaol_s.png',
-      'huitre_s.png',
-      'livarot_s.png',
-      'pontleveque_s.png',
-      'viande_s.png',
+    const sellogos = ref([
+      // 'isigny_s.png',
+      // 'fromage_aop_s.png',
+      // 'sdn_s.png',
+      // 'cnaol_s.png',
+      // 'huitre_s.png',
+      // 'livarot_s.png',
+      // 'pontleveque_s.png',
+      // 'viande_s.png',
       // Ajoutez plus de chemins vers les logos de vos clients
-    ];
+    ]);
     const project = ref([]);
 
     const galleryImages = [
@@ -117,7 +138,7 @@ export default {
           project.value = data.value.map((item) => {
             const projectInstance = new Project(item);
             logos.value.push(projectInstance.img_logo); // Utilisez ici la propriété appropriée pour les logos
-            // sellogos.value.push(projectInstance.id_instagram); // Assumant que sellogos utilise id_instagram
+            sellogos.value.push('s_' + projectInstance.img_logo); // Assumant que sellogos utilise id_instagram
             return projectInstance;
           });
           console.log(project.value);
@@ -137,6 +158,8 @@ export default {
       galleryImages,
       text,
       intro,
+      pindex,
+      project,
     };
   },
 };
@@ -176,7 +199,30 @@ export default {
 
 .project-view {
   background-color: #1e024d;
-  padding: 4vw 8vw;
+  padding: 4vw 7vw;
+  color: #ffffff;
+}
+
+.title-p {
+  font-size: 3vw;
+  /* margin-bottom: 2.5vh; */
+}
+.client-p {
+  /* margin-bottom: 2.5vh; */
+  font-size: 1.1vw;
+  text-transform: uppercase;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.intro-p {
+  font-size: 1vw;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+}
+.text-p {
+  font-size: 0.9vw;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  white-space: pre-line; /* This will respect newlines in the text */
 }
 
 /* .logo-scroll-list {

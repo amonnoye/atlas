@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-xl flex flex-center" v-if="!showList">
+  <q-page class="q-pa-xl flex flex-center">
     <q-form @submit.prevent="submitProject" style="width: 50%">
       <q-input
         filled
@@ -61,46 +61,7 @@
         color="secondary"
         class="q-my-sm"
       />
-      <q-space />
-      <q-btn
-        label="Liste des projets"
-        @click="seeList(true)"
-        color="green"
-        class="q-my-sm"
-      />
     </q-form>
-  </q-page>
-  <q-page class="q-pa-xl flex flex-center" v-if="showList">
-    <div style="width: 80%">
-      <div v-for="projec in project" :key="projec.id" class="q-mb-md">
-        <q-card dark>
-          <q-card-section>
-            <div class="text-h6">{{ projec.title }}</div>
-          </q-card-section>
-          <q-card-section>
-            {{ projec.texte }}
-          </q-card-section>
-          <q-card-action
-            ><q-btn
-              label="supprimer"
-              @click="supprimer(projec.id)"
-              color="red"
-              class="q-my-sm"
-            />
-          </q-card-action>
-          <!-- Ajouter plus de sections de carte si nécessaire -->
-        </q-card>
-      </div>
-
-      <q-space />
-
-      <q-btn
-        label="Ajouter un projet"
-        @click="seeList(false)"
-        color="green"
-        class="q-my-sm"
-      />
-    </div>
   </q-page>
 </template>
 
@@ -108,14 +69,13 @@
 import { inject, ref } from 'vue';
 import { Project } from 'src/components/project';
 import { api } from 'src/boot/axios';
-import { useQuasar } from 'quasar';
 
 export default {
   components: {},
   setup() {
     const background = inject('bg-key');
     background.value = 2;
-    const $q = useQuasar();
+
     const nav = inject('nav-key');
     nav.value = 4;
 
@@ -197,92 +157,11 @@ export default {
         fileReader.readAsDataURL(files[0]);
       }
     };
-    const showList = ref(false);
-    const seeList = (showlist) => {
-      showList.value = showlist;
-    };
-    const project = ref([]);
-    const data = ref();
-    function loadData() {
-      api
-        .get('/project')
-        .then((response) => {
-          data.value = response.data;
-          const valeur = ref();
-          valeur.value = [];
-          let row = {};
-          let itemCount = 0;
-          let rowIndex = 0;
-          row['id'] = rowIndex;
-          console.log(project.value);
-          project.value = data.value.map((item) => {
-            const projectInstance = new Project(item);
-            // logos.value.push(projectInstance.img_logo); // Utilisez ici la propriété appropriée pour les logos
-            //  sellogos.value.push('s_' + projectInstance.img_logo); // Assumant que sellogos utilise id_instagram
-            return projectInstance;
-          });
-          console.log(project.value);
-          // console.log(logos.value);
-        })
-        .catch((error) => {
-          console.log(error);
-          $q.notify('Une erreur s"est produite"');
-        });
-    }
-    loadData();
-
-    function supprimer(id) {
-      const formData = new FormData();
-      formData.append('id', id);
-      api
-        .post('/delete_project/', formData)
-        .then(() => {
-          // Suppression réussie, notifier l'utilisateur
-          $q.notify({
-            color: 'green',
-            textColor: 'white',
-            icon: 'check_circle',
-            message: 'Projet supprimé avec succès',
-          });
-
-          // Recharger la liste des projets pour refléter la suppression
-          loadData();
-        })
-        .catch((error) => {
-          // Gérer l'erreur
-          console.error('Erreur lors de la suppression du projet', error);
-          $q.notify({
-            color: 'red',
-            textColor: 'white',
-            icon: 'error',
-            message: 'Erreur lors de la suppression du projet',
-          });
-        });
-      // Affichez une boîte de dialogue de confirmation avant la suppression
-      // $q.dialog({
-      //   title: 'Confirmer la suppression',
-      //   message: 'Voulez-vous vraiment supprimer ce projet ?',
-      //   cancel: true,
-      //   persistent: true,
-      // })
-      //   .onOk(() => {
-      //     // Si l'utilisateur confirme, envoyez la requête de suppression
-
-      //   })
-      //   .onCancel(() => {
-      //     // Si l'utilisateur annule, vous pouvez éventuellement gérer ce cas
-      //     console.log('Suppression annulée');
-      //   });
-    }
 
     return {
       newProject,
       submitProject,
       handleFileChange,
-      seeList,
-      showList,
-      project,
-      supprimer,
     };
   },
 };

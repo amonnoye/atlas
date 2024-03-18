@@ -22,7 +22,15 @@
 </template>
 
 <script>
-import { ref, computed, watch, onMounted, nextTick, watchEffect } from 'vue';
+import {
+  ref,
+  computed,
+  inject,
+  watch,
+  onMounted,
+  nextTick,
+  watchEffect,
+} from 'vue';
 
 export default {
   props: {
@@ -38,8 +46,9 @@ export default {
   setup(props) {
     const logoWindow = ref(null);
     const scrollPosition = ref(0);
+    const selectedLogoIndex = inject('pindex');
 
-    const selectedLogoIndex = ref(-1);
+    //const selectedLogoIndex = ref(-1);
     const logoWidth = ref(0); // Width of each logo including margin
     const visibleCount = ref(7);
 
