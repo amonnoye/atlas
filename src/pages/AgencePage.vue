@@ -1,86 +1,119 @@
 <template class="agence silkfont">
   <div class="position-relative">
     <div class="txt-container">
-      <div class="row position-relative">
-        <div class="title">We are atlas</div>
-      </div>
-      <div class="row position-relative">
-        <div class="subtitle">
-          Nous portons sur nos épaules <br />
-          votre image et réputation digitale.
-        </div>
-        <q-img
-          alt="Atlas - Agence de social média marketing et d'influence"
-          src="../assets/img/circle.png"
-          width="15vw"
-          class="project-btn"
-          @click="goToChiffre()"
-        >
-          <div
-            class="absolute-full bg-transparent flex flex-center silkfont"
-            style="padding-left: 2.2vw"
-          >
-            Nos chiffres
-          </div>
-        </q-img>
-      </div>
-    </div>
-    <div class="carroussel-container" v-if="valeur && valeur.length > 0">
-      <q-carousel
-        v-model="slide"
-        transition-prev="slide-down"
-        transition-next="slide-up"
-        vertical
-        swipeable
-        infinite
-        animated
-        autoplay
-        control-color="white"
-        navigation
-        navigation-position="left"
-        padding
-        height="45vh"
-        class="bg-transparent text-white rounded-borders"
+      <!-- <Transition name="slide-fade" @after-leave="onAfterLeave"> -->
+      <transition
+        appear
+        enter-active-class="animated slow fadeInDown"
+        leave-active-class="animated slow fadeOutUp"
       >
-        <template v-slot:navigation-icon="{ active, btnProps, onClick }">
-          <q-btn
-            v-if="active"
-            size="0.7vh"
-            icon="radio_button_checked"
-            flat
-            round
-            dense
-            style="margin: 0; padding: 0.3vh"
-            @click="onClick"
-          />
-          <q-btn
-            v-else
-            size="0.6vh"
-            :icon="btnProps.icon"
-            flat
-            round
-            dense
-            style="margin: 0; padding: 0.3vh"
-            @click="onClick"
-          />
-        </template>
+        <div v-if="show" class="row position-relative">
+          <div class="title">We are atlas</div>
+        </div>
+      </transition>
+      <!-- </Transition> -->
 
-        <q-carousel-slide
-          :name="val.id"
-          class="column no-wrap"
-          v-for="val in valeur"
-          v-bind:key="val.id"
+      <div class="row position-relative">
+        <transition
+          appear
+          enter-active-class="animated slow fadeInLeft"
+          leave-active-class="animated slow fadeOutLeft"
+          @after-leave="onAfterLeave"
+          @after-enter="onAfterEnter"
         >
-          <div class="q-mt-md val-title">{{ val.title }}</div>
-          <div class="q-mt-md val-text">{{ val.texte }}</div>
-        </q-carousel-slide>
-      </q-carousel>
+          <div v-if="show" class="subtitle">
+            Nous portons sur nos épaules <br />
+            votre image et réputation digitale.
+          </div>
+        </transition>
+        <transition
+          appear
+          enter-active-class="animated slow fadeInRight"
+          leave-active-class="animated slow fadeOutRight"
+        >
+          <q-img
+            alt="Atlas - Agence de social média marketing et d'influence"
+            src="../assets/img/circle.png"
+            width="15vw"
+            class="project-btn"
+            @click="goToChiffre()"
+            v-if="show"
+          >
+            <div
+              class="absolute-full bg-transparent flex flex-center silkfont"
+              style="padding-left: 2.2vw"
+            >
+              Nos chiffres
+            </div>
+          </q-img>
+        </transition>
+      </div>
     </div>
+    <transition
+      appear
+      enter-active-class="animated slow fadeInLeft"
+      leave-active-class="animated slow fadeOutLeft"
+    >
+      <div
+        class="carroussel-container"
+        v-if="show && valeur && valeur.length > 0"
+      >
+        <q-carousel
+          v-model="slide"
+          transition-prev="slide-down"
+          transition-next="slide-up"
+          vertical
+          swipeable
+          infinite
+          animated
+          autoplay
+          control-color="white"
+          navigation
+          navigation-position="left"
+          padding
+          height="45vh"
+          class="bg-transparent text-white rounded-borders"
+        >
+          <template v-slot:navigation-icon="{ active, btnProps, onClick }">
+            <q-btn
+              v-if="active"
+              size="0.7vh"
+              icon="radio_button_checked"
+              flat
+              round
+              dense
+              style="margin: 0; padding: 0.3vh"
+              @click="onClick"
+            />
+            <q-btn
+              v-else
+              size="0.6vh"
+              :icon="btnProps.icon"
+              flat
+              round
+              dense
+              style="margin: 0; padding: 0.3vh"
+              @click="onClick"
+            />
+          </template>
+
+          <q-carousel-slide
+            :name="val.id"
+            class="column no-wrap"
+            v-for="val in valeur"
+            v-bind:key="val.id"
+          >
+            <div class="q-mt-md val-title">{{ val.title }}</div>
+            <div class="q-mt-md val-text">{{ val.texte }}</div>
+          </q-carousel-slide>
+        </q-carousel>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
-import { inject, ref } from 'vue';
+import { inject, ref, watch, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { api } from 'src/boot/axios';
 
@@ -123,10 +156,38 @@ export default {
     function goToChiffre() {
       const navigationResult = router.push({ name: 'chiffre' });
     }
+
+    const toggleAnim = inject('toggle-anim');
+    const show = ref(false);
+    const goPage = inject('goPage');
+    function onAfterLeave(el) {
+      console.log('leave after' + nav.value);
+      show.value = true;
+      goPage(nav.value);
+      // const navigationResult = router.push({ name: 'projects' });
+    }
+    const isShown = ref(false);
+    function onAfterEnter(el) {
+      console.log('aftert enter ' + toggleAnim.value);
+      isShown.value = true;
+    }
+
+    onMounted(() => {
+      show.value = true;
+    });
+
+    watch(toggleAnim, (newVal) => {
+      if (isShown.value) {
+        show.value = false;
+      }
+    });
     return {
       slide,
       valeur,
       goToChiffre,
+      onAfterLeave,
+      show,
+      onAfterEnter,
     };
   },
 };

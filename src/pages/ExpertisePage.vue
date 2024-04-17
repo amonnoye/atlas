@@ -3,40 +3,63 @@
     <div class="position-relative">
       <div class="txt-container">
         <div class="row position-relative">
-          <div class="subtitle">
-            L'agence de social média <br />
-            Marketing et D'influence
-          </div>
-          <q-img
-            alt="Atlas - Agence de social média marketing et d'influence"
-            src="../assets/img/circle_expert.png"
-            width="18vw"
-            class="project-btn"
-            @click="goToTeam()"
+          <transition
+            appear
+            enter-active-class="animated slow slideInDown"
+            leave-active-class="animated slow slideOutUp"
           >
-            <div class="absolute-full bg-transparent flex flex-center silkfont">
-              L'équipe
+            <div class="subtitle" v-if="show">
+              L'agence de social média <br />
+              Marketing et D'influence
             </div>
-          </q-img>
+          </transition>
+          <transition
+            appear
+            enter-active-class="animated slow slideInRight"
+            leave-active-class="animated slow slideOutRight"
+          >
+            <q-img
+              v-if="show"
+              alt="Atlas - Agence de social média marketing et d'influence"
+              src="../assets/img/circle_expert.png"
+              width="18vw"
+              class="project-btn"
+              @click="goToTeam()"
+            >
+              <div
+                class="absolute-full bg-transparent flex flex-center silkfont"
+              >
+                L'équipe
+              </div>
+            </q-img></transition
+          >
         </div>
       </div>
-      <div class="services-section">
-        <div class="row" style="width: 54vw; height: 45vh">
-          <service-card
-            v-for="service in services"
-            :key="service.title"
-            :icon="service.icon"
-            :title="service.title"
-            :description="service.description"
-            class="col-auto col-sm-4 q-pr-md"
-          />
+      <transition
+        appear
+        enter-active-class="animated slow slideInLeft"
+        leave-active-class="animated slow slideOutLeft"
+        @after-leave="onAfterLeave"
+        @after-enter="onAfterEnter"
+      >
+        <div v-if="show" class="services-section">
+          <div class="row" style="width: 54vw; height: 45vh">
+            <service-card
+              v-for="service in services"
+              :key="service.title"
+              :icon="service.icon"
+              :title="service.title"
+              :description="service.description"
+              class="col-auto col-sm-4 q-pr-md"
+            />
+          </div>
         </div>
-      </div>
+      </transition>
     </div>
   </q-page>
 </template>
 <script>
-import { inject, ref, defineComponent } from 'vue';
+import { inject, ref, defineComponent, watch, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import ServiceCard from 'components/ServiceCard.vue';
 
@@ -97,9 +120,37 @@ export default {
       router.push({ name: 'equipe' });
     }
 
+    const toggleAnim = inject('toggle-anim');
+    const show = ref(false);
+    const goPage = inject('goPage');
+    function onAfterLeave(el) {
+      console.log('leave after');
+      show.value = true;
+      goPage(nav.value);
+      // const navigationResult = router.push({ name: 'projects' });
+    }
+
+    onMounted(() => {
+      show.value = true;
+    });
+
+    const isShown = ref(false);
+    function onAfterEnter(el) {
+      console.log('aftert enter ' + toggleAnim.value);
+      isShown.value = true;
+    }
+
+    watch(toggleAnim, (newVal) => {
+      if (isShown.value) {
+        show.value = false;
+      }
+    });
     return {
       services,
       goToTeam,
+      show,
+      onAfterLeave,
+      onAfterEnter,
     };
   },
 };

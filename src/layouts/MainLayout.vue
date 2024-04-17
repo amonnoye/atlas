@@ -383,20 +383,26 @@ export default defineComponent({
       }
     }
 
+    const toggleAnim = ref(false);
+    provide('toggle-anim', toggleAnim);
     const handleScroll = (event) => {
       if ([0, 1, 2].indexOf(navbarIndex.value) !== -1) {
         if (event.deltaY > 0) {
-          // console.log('Scrolling down');
+          console.log('Scrolling down' + navbarIndex.value);
           navbarIndex.value++;
+          console.log('Scrolling down' + navbarIndex.value);
           if (navbarIndex.value >= 3) navbarIndex.value = 0;
+          console.log('Scrolling down' + navbarIndex.value);
           changeNavbar(navbarIndex.value);
-          goPage(navbarIndex.value);
+          toggleAnim.value = !toggleAnim.value;
+          //goPage(navbarIndex.value);
         } else {
           // console.log('Scrolling up');
           navbarIndex.value--;
           if (navbarIndex.value < 0) navbarIndex.value = 2;
           changeNavbar(navbarIndex.value);
-          goPage(navbarIndex.value);
+          toggleAnim.value = !toggleAnim.value;
+          // goPage(navbarIndex.value);
         }
       }
     };
@@ -459,6 +465,7 @@ export default defineComponent({
     function goPage(index) {
       router.push({ name: pageList[index] });
     }
+    provide('goPage', goPage);
     // Observateurs pour gérer le changement d'image de fond
     watch(
       () => backgroundUrlIndex.value,
@@ -657,5 +664,19 @@ export default defineComponent({
 .slide-leave-from {
   transform: translateY(0);
   opacity: 1;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.5s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.5s ease-out;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateY(10vw);
+  opacity: 0;
 }
 </style>
