@@ -1,6 +1,6 @@
 <template class="contact">
   <div class="contact-page">
-    <div class="contact-info">
+    <div class="contact-info" style="margin-top: 10vh">
       <div style="font-size: 3.5vw; margin-bottom: 2vh">Contact</div>
       <div style="font-size: 1.7vw; margin-bottom: 5vh">
         <a href="mailto:contact@agence-atlas.fr">contact@agence-atlas.fr</a>
@@ -57,7 +57,7 @@
         </q-btn>
       </div>
     </div>
-    <div class="contact-form">
+    <div class="contact-form" style="margin-top: 10vh">
       <q-form @submit="submitForm" @reset="onReset" class="column">
         <q-input
           color="white"
@@ -119,11 +119,11 @@
           rounded
           type="submit"
           color="white"
-          class="q-mt-xl"
+          class="q-mt-lg"
           outline
           style="margin-left: 8vw; margin-right: 8vw; height: 3vw"
         />
-        <div class="text-center q-mt-md">* Obligatoires</div>
+        <div class="text-center q-mt-sm">* Obligatoire</div>
       </q-form>
     </div>
   </div>
@@ -238,12 +238,12 @@ a {
   // justify-content: space-evenly;
 }
 .custom-input {
-  margin-bottom: 2.5vh;
+  margin-bottom: 10px;
 }
 .contact-page {
   display: flex;
   align-items: flex-start;
-  padding: 10vh 10vw 0vh 10vw; // Ajustez selon vos besoins
+  padding: 1vh 10vw 0vh 10vw; // Ajustez selon vos besoins
   color: white;
   .contact-info {
     width: 40%; // Ajustez selon vos besoins

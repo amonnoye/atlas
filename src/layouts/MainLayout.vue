@@ -6,12 +6,12 @@
   >
     <q-header>
       <q-toolbar class="header-tb position-relative" style="padding-left: 0%">
-        <div class="background-project" v-if="headerIndex == 2">
+        <!-- <div class="background-project" v-if="headerIndex == 2">
           <div class="row full-width full-height">
             <div class="col-4"></div>
             <div class="col-8 bg-project"></div>
           </div>
-        </div>
+        </div> -->
         <q-btn flat dense label="" class="q-ml-lg q-pt-lg" to="/home">
           <img src="../assets/img/logo/logoxs.png" />
         </q-btn>
@@ -144,8 +144,19 @@
         </q-btn>
       </q-toolbar>
     </q-header>
-
+    <div class="background-project position-absolute" v-if="headerIndex == 2">
+      <div class="row full-width full-height">
+        <div class="col-4"></div>
+        <div class="col-8 bg-project"></div>
+      </div>
+    </div>
     <q-page-container>
+      <!-- <div class="background-project" v-if="headerIndex == 2">
+        <div class="row full-width full-height">
+          <div class="col-4"></div>
+          <div class="col-8 bg-project"></div>
+        </div>
+      </div> -->
       <router-view v-slot="{ Component }">
         <!-- <Transition name="slide" mode="in-out"> -->
         <!-- <CustomTransition transitionName="fade" mode="out-in"> -->
@@ -217,12 +228,12 @@
 
     <q-footer class=""
       ><q-toolbar class="footer-tb transparent silkfont position-relative">
-        <div class="background-project" v-if="headerIndex == 2">
+        <!-- <div class="background-project" v-if="headerIndex == 2">
           <div class="row full-width full-height">
             <div class="col-4"></div>
             <div class="col-8 bg-project"></div>
           </div>
-        </div>
+        </div> -->
         <q-btn
           flat
           dense
@@ -621,6 +632,8 @@ export default defineComponent({
   // background-color: #1e024d;
   height: 100%;
   width: 100%;
+  top: 0;
+  z-index: 0;
 }
 
 .bg-project {

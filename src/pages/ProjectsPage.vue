@@ -1,41 +1,57 @@
 <template>
   <div class="position-relative">
-    <div class="position-absolute" style="max-height: 100%; height: 85.6vh">
-      <div class="row">
-        <div class="col-4 colonne">
-          <div class="row title-page">Projets</div>
-          <div class="row client-page">Nos clients</div>
-          <div class="row intro-page">
-            {{ intro }}
-          </div>
-          <div class="row text-page">
-            {{ text }}
-          </div>
+    <!-- <div class="position-absolute" style="max-height: 100%; height: 85.6vh"> -->
+    <div class="row">
+      <div class="col-4 colonne">
+        <div class="row title-page">Projets</div>
+        <div class="row client-page">Nos clients</div>
+        <div class="row intro-page">
+          {{ intro }}
         </div>
-        <div class="col-8 project-view">
-          <logo-scroll-list
+        <div class="row text-page">
+          {{ text }}
+        </div>
+      </div>
+      <div class="col-8 project-view">
+        <!-- <logo-scroll-list
             v-if="logos.length > 0"
             :logos="logos"
             :logosel="sellogos"
             class="logo-scroll-list"
+          /> -->
+        <q-tabs
+          v-model="tab"
+          indicator-color="accent"
+          active-color="secondary"
+          class="tab-content"
+          active-class="tab-active"
+        >
+          <q-tab
+            style="height: 90px; width: 90px !important; padding: 0 !important"
+            v-for="(proj, index) in project"
+            :key="index"
+            :name="proj.id"
+            :icon="'img:' + getImage(proj.img_logo)"
+            @click="selectLogo(index)"
           />
-          <div class="row" v-if="project.length > 0">
-            <div class="col-6">
-              <q-scroll-area
-                class=""
-                style="height: 60vh; max-width: 23vw; margin-top: 5vh"
-              >
-                <h1 class="title-p">{{ project[pindex].title }}</h1>
-                <div class="intro-p">{{ project[pindex].texte_gras }}</div>
-                <div class="text-p">{{ project[pindex].texte }}</div>
-              </q-scroll-area>
-            </div>
-            <div class="col-6">
-              <div class="flex flex-center">
-                <div class="row q-gutter-xs" style="margin-top: 13vh">
-                  <div class="col-3" v-for="n in 9" :key="n">
-                    <q-skeleton animation="blink" height="13vh" width="13vh" />
-                  </div>
+        </q-tabs>
+
+        <div class="row" v-if="project.length > 0">
+          <div class="col-6">
+            <q-scroll-area
+              class=""
+              style="height: 50vh; max-width: 23vw; margin-top: 10vh"
+            >
+              <h1 class="title-p">{{ project[pindex].title }}</h1>
+              <div class="intro-p">{{ project[pindex].texte_gras }}</div>
+              <div class="text-p">{{ project[pindex].texte }}</div>
+            </q-scroll-area>
+          </div>
+          <div class="col-6">
+            <div class="flex flex-center">
+              <div class="row q-gutter-md" style="margin-top: 10vh">
+                <div class="col-3" v-for="n in 9" :key="n">
+                  <q-skeleton animation="blink" height="13vh" width="13vh" />
                 </div>
               </div>
             </div>
@@ -44,6 +60,7 @@
       </div>
     </div>
   </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -52,13 +69,13 @@ import { useRouter } from 'vue-router';
 import { api } from 'src/boot/axios';
 import { useQuasar } from 'quasar';
 import QImgGallery from 'components/QImgGallery.vue'; // Assurez-vous d'avoir ce composant ou utilisez une alternative
-import LogoScrollList from 'src/components/LogoScrollList.vue';
+//import LogoScrollList from 'src/components/LogoScrollList.vue';
 import { Project } from 'src/components/project';
 
 export default {
   components: {
     //QImgGallery,
-    LogoScrollList,
+    // LogoScrollList,
   },
   setup() {
     const router = useRouter();
@@ -87,6 +104,10 @@ export default {
         ' de contenus, la création de personnages pour porter le discours de' +
         ' votre marque...'
     );
+
+    function selectLogo(index) {
+      pindex.value = index;
+    }
 
     const logos = ref([
       // 'isigny.png',
@@ -123,6 +144,7 @@ export default {
     ];
 
     const data = ref();
+    const tab = ref('');
     function loadData() {
       api
         .get('/project')
@@ -141,8 +163,10 @@ export default {
             sellogos.value.push('s_' + projectInstance.img_logo); // Assumant que sellogos utilise id_instagram
             return projectInstance;
           });
+          tab.value = project.value[project.value.length / 2].id;
+          selectLogo(project.value.length / 2);
           console.log(project.value);
-          console.log(logos.value);
+          //console.log(logos.value);
         })
         .catch((error) => {
           console.log(error);
@@ -151,7 +175,12 @@ export default {
     }
     loadData();
 
+    function getImage(name) {
+      return 'http://dev2.agence-atlas.fr/api/medial/' + name;
+    }
+
     return {
+      tab,
       slide,
       logos,
       sellogos,
@@ -160,17 +189,20 @@ export default {
       intro,
       pindex,
       project,
+
+      selectLogo,
+      getImage,
     };
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .colonne {
   color: #ffffff;
   /* background-color: #df451220; */
-  height: 85.6vh !important;
-  max-height: 100% !important;
+  height: 750px !important;
+  max-height: 598px !important;
   padding-top: 8vh;
   padding-left: 8vw;
   padding-right: 8vw;
@@ -223,6 +255,13 @@ export default {
   font-size: 0.9vw;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   white-space: pre-line; /* This will respect newlines in the text */
+}
+
+.tab-active {
+  background-color: $secondary !important;
+}
+
+.tab-content {
 }
 
 /* .logo-scroll-list {

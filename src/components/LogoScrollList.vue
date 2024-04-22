@@ -1,5 +1,5 @@
 <template>
-  <div class="logo-scroll-list">
+  <!-- <div class="logo-scroll-list">
     <q-btn icon="arrow_left" flat @click="scrollLeft" class="scroll-button" />
     <div class="logo-window" ref="logoWindow">
       <div
@@ -18,7 +18,22 @@
       </div>
     </div>
     <q-btn icon="arrow_right" flat @click="scrollRight" class="scroll-button" />
-  </div>
+  </div> -->
+  <q-tabs
+    v-model="tab"
+    indicator-color="purple"
+    active-color="primary"
+    class=""
+  >
+    <q-tab
+      style="height: 90px; width: 90px"
+      v-for="(logo, index) in logos"
+      :key="index"
+      :name="index"
+      :icon="'img:' + getImage(logo)"
+      @click="selectLogo(index)"
+    />
+  </q-tabs>
 </template>
 
 <script>
