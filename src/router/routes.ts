@@ -43,8 +43,14 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'back',
-        component: () => import('pages/BackPage.vue'),
+        component: () => import('layouts/BackLayout.vue'),
         name: 'back',
+        children: [
+          {
+            path: 'project',
+            component: () => import('pages/BackProjectPage.vue'),
+          },
+        ],
       },
     ],
   },

@@ -5,7 +5,11 @@
     :style="{ backgroundImage: 'url(' + backgroundClass + ')' }"
   >
     <q-header>
-      <q-toolbar class="header-tb position-relative" style="padding-left: 0%">
+      <q-toolbar
+        v-if="!isBack"
+        class="header-tb position-relative"
+        style="padding-left: 0%"
+      >
         <!-- <div class="background-project" v-if="headerIndex == 2">
           <div class="row full-width full-height">
             <div class="col-4"></div>
@@ -226,7 +230,7 @@
       </div>
     </div>
 
-    <q-footer class=""
+    <q-footer v-if="!isBack" class=""
       ><q-toolbar class="footer-tb transparent silkfont position-relative">
         <!-- <div class="background-project" v-if="headerIndex == 2">
           <div class="row full-width full-height">
@@ -320,6 +324,7 @@ export default defineComponent({
   setup() {
     const agenceDrop = ref(false);
     const router = useRouter();
+
     const backgroundImages = [
       {
         url: new URL('../assets/img/background/default.webp', import.meta.url)
@@ -372,6 +377,13 @@ export default defineComponent({
     const backgroundClass = computed(() => {
       const t = backgroundUrlIndex.value;
       return backgroundImages[t].url;
+    });
+
+    console.log(router.currentRoute.value.name);
+    const isBack = computed(() => {
+      const isB = router.currentRoute.value.name;
+      console.log(router.currentRoute.value.name);
+      return isB === 'back';
     });
 
     // Méthodes pour changer l'image de fond
@@ -491,6 +503,7 @@ export default defineComponent({
       }
     );
     return {
+      isBack,
       backgroundClass,
       backgroundImages,
       navbar,

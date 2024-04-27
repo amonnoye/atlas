@@ -42,7 +42,7 @@
         <div class="row" v-if="project.length > 0">
           <div class="col-6">
             <q-scroll-area
-              class="bg-"
+              class=""
               style="height: 100%; max-width: 25vw; margin-top: 4vh"
             >
               <h1 class="title-p">{{ project[pindex].title }}</h1>
@@ -317,7 +317,7 @@ export default {
 .page-project {
   .q-tab__icon {
     //background-color: aqua !important;
-    height: 90px !important;
+    height: auto !important;
     width: 90px !important;
   }
 
