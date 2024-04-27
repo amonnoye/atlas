@@ -1,5 +1,5 @@
 <template>
-  <div class="position-relative">
+  <div class="position-relative page-project">
     <!-- <div class="position-absolute" style="max-height: 100%; height: 85.6vh"> -->
     <div class="row">
       <div class="col-4 colonne">
@@ -21,13 +21,15 @@
           /> -->
         <q-tabs
           v-model="tab"
-          indicator-color="accent"
-          active-color="secondary"
+          indicator-color="secondary"
           class="tab-content"
           active-class="tab-active"
+          narrow-indicator
+          left-icon="arrow_left"
+          right-icon="arrow_right"
         >
           <q-tab
-            style="height: 90px; width: 90px !important; padding: 0 !important"
+            style=""
             v-for="(proj, index) in project"
             :key="index"
             :name="proj.id"
@@ -40,7 +42,7 @@
           <div class="col-6">
             <q-scroll-area
               class=""
-              style="height: 50vh; max-width: 23vw; margin-top: 10vh"
+              style="height: 50vh; max-width: 23vw; margin-top: 2vh"
             >
               <h1 class="title-p">{{ project[pindex].title }}</h1>
               <div class="intro-p">{{ project[pindex].texte_gras }}</div>
@@ -49,7 +51,7 @@
           </div>
           <div class="col-6">
             <div class="flex flex-center">
-              <div class="row q-gutter-md" style="margin-top: 10vh">
+              <div class="row q-gutter-md" style="margin-top: 7vh">
                 <div class="col-3" v-for="n in 9" :key="n">
                   <q-skeleton animation="blink" height="13vh" width="13vh" />
                 </div>
@@ -230,8 +232,8 @@ export default {
 }
 
 .project-view {
-  background-color: #1e024d;
-  padding: 4vw 7vw;
+  // background-color: #1e024d;
+  padding: 2vw 4vw;
   color: #ffffff;
 }
 
@@ -258,13 +260,29 @@ export default {
 }
 
 .tab-active {
-  background-color: $secondary !important;
+  //background-color: $secondary !important;
 }
 
 .tab-content {
+  padding: 0 70px;
 }
 
 /* .logo-scroll-list {
   overflow-x: auto;
 }*/
+</style>
+
+<style lang="scss">
+.page-project {
+  .q-tab__icon {
+    //background-color: aqua !important;
+    height: 90px !important;
+    width: 90px !important;
+  }
+
+  .q-tab__indicator {
+    width: 50px;
+    margin: auto;
+  }
+}
 </style>
