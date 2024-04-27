@@ -154,7 +154,7 @@
         <div class="col-8 bg-project"></div>
       </div>
     </div>
-    <q-page-container>
+    <q-page-container :class="isBack ? 'nopadback' : ''">
       <!-- <div class="background-project" v-if="headerIndex == 2">
         <div class="row full-width full-height">
           <div class="col-4"></div>
@@ -311,6 +311,7 @@ import ScrollToTopTransition from 'components/ScrollToTopTransition.vue';
 import CustomTransition from 'components/ScrollToTopTransition.vue';
 import { useRouter } from 'vue-router';
 import { api } from 'src/boot/axios';
+import _ from 'lodash';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -379,11 +380,15 @@ export default defineComponent({
       return backgroundImages[t].url;
     });
 
-    console.log(router.currentRoute.value.name);
     const isBack = computed(() => {
-      const isB = router.currentRoute.value.name;
+      const isB = router.currentRoute.value.name?.toString();
       console.log(router.currentRoute.value.name);
-      return isB === 'back';
+      console.log(router.currentRoute.value.name);
+      if (_.isNil(isB)) {
+        return false;
+      } else {
+        return isB?.includes('back');
+      }
     });
 
     // Méthodes pour changer l'image de fond
@@ -527,6 +532,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.nopadback {
+  padding: 0 !important;
+}
 .header-tb,
 .footer-tb {
   color: #ffffff;

@@ -47,8 +47,35 @@ const routes: RouteRecordRaw[] = [
         name: 'back',
         children: [
           {
-            path: 'project',
-            component: () => import('pages/BackProjectPage.vue'),
+            path: 'addproject',
+            name: 'backaddproject',
+            component: () => import('pages/admin/BackProjectPage.vue'),
+          },
+          {
+            path: 'listproject',
+            name: 'backlistproject',
+            component: () => import('pages/admin/BackListProjectPage.vue'),
+          },
+          {
+            path: 'editproject/:id',
+            name: 'backeditproject',
+            props: true,
+            component: () => import('pages/admin/BackEditProjectPage.vue'),
+          },
+          {
+            path: 'addpeople',
+            name: 'backaddpeople',
+            component: () => import('pages/admin/BackPeoplePage.vue'),
+          },
+          {
+            path: 'editpeople',
+            name: 'backeditpeople',
+            component: () => import('pages/admin/BackEditPeoplePage.vue'),
+          },
+          {
+            path: 'listpeople',
+            name: 'backlistpeople',
+            component: () => import('pages/admin/BackListPeoplePage.vue'),
           },
         ],
       },

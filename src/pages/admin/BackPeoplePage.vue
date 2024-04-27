@@ -1,5 +1,10 @@
 <template>
-  <q-page class="q-pa-xl flex flex-center" v-if="!showList">
+  <q-page class="q-pa-xl flex flex-center addpropage" v-if="!showList">
+    <q-item class="row fit flex flex-center justify-center">
+      <q-item-section class="text-center item-link"
+        >Ajouter une Atlassienne</q-item-section
+      >
+    </q-item>
     <q-form @submit.prevent="submitProject" style="width: 50%">
       <q-input
         filled
@@ -64,43 +69,11 @@
       <q-space />
       <q-btn
         label="Liste des projets"
-        @click="seeList(true)"
+        :to="'listproject'"
         color="green"
         class="q-my-sm"
       />
     </q-form>
-  </q-page>
-  <q-page class="q-pa-xl flex flex-center" v-if="showList">
-    <div style="width: 80%">
-      <div v-for="projec in project" :key="projec.id" class="q-mb-md">
-        <q-card dark>
-          <q-card-section>
-            <div class="text-h6">{{ projec.title }}</div>
-          </q-card-section>
-          <q-card-section>
-            {{ projec.texte }}
-          </q-card-section>
-          <q-card-action
-            ><q-btn
-              label="supprimer"
-              @click="supprimer(projec.id)"
-              color="red"
-              class="q-my-sm"
-            />
-          </q-card-action>
-          <!-- Ajouter plus de sections de carte si nécessaire -->
-        </q-card>
-      </div>
-
-      <q-space />
-
-      <q-btn
-        label="Ajouter un projet"
-        @click="seeList(false)"
-        color="green"
-        class="q-my-sm"
-      />
-    </div>
   </q-page>
 </template>
 
@@ -330,4 +303,10 @@ export default {
 //     font-size: 0.8rem; /* Adjust for mobile view */
 //   }
 // }
+</style>
+<style lang="scss">
+.addpropage {
+  background-color: $secondary !important;
+  padding: 0 !important;
+}
 </style>
