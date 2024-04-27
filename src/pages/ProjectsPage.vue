@@ -22,11 +22,12 @@
         <q-tabs
           v-model="tab"
           indicator-color="secondary"
-          class="tab-content"
+          class="tab-content tabs-container"
           active-class="tab-active"
           narrow-indicator
           left-icon="arrow_left"
           right-icon="arrow_right"
+          ref="tabsContainer"
         >
           <q-tab
             style=""
@@ -41,8 +42,8 @@
         <div class="row" v-if="project.length > 0">
           <div class="col-6">
             <q-scroll-area
-              class=""
-              style="height: 50vh; max-width: 23vw; margin-top: 2vh"
+              class="bg-"
+              style="height: 100%; max-width: 25vw; margin-top: 4vh"
             >
               <h1 class="title-p">{{ project[pindex].title }}</h1>
               <div class="intro-p">{{ project[pindex].texte_gras }}</div>
@@ -53,7 +54,12 @@
             <div class="flex flex-center">
               <div class="row q-gutter-md" style="margin-top: 7vh">
                 <div class="col-3" v-for="n in 9" :key="n">
-                  <q-skeleton animation="blink" height="13vh" width="13vh" />
+                  <q-skeleton
+                    animation="blink"
+                    class=""
+                    height="13vh"
+                    width="13vh"
+                  />
                 </div>
               </div>
             </div>
@@ -66,7 +72,7 @@
 </template>
 
 <script>
-import { ref, inject, provide } from 'vue';
+import { ref, inject, provide, nextTick, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { api } from 'src/boot/axios';
 import { useQuasar } from 'quasar';
@@ -109,6 +115,10 @@ export default {
 
     function selectLogo(index) {
       pindex.value = index;
+
+      nextTick(() => {
+        centerTab();
+      });
     }
 
     const logos = ref([
@@ -169,16 +179,44 @@ export default {
           selectLogo(project.value.length / 2);
           console.log(project.value);
           //console.log(logos.value);
+
+          nextTick(() => {
+            centerTab(); // Centre le logo après le chargement des données
+          });
         })
         .catch((error) => {
           console.log(error);
           $q.notify('Une erreur s"est produite"');
         });
     }
-    loadData();
+
+    onMounted(() => {
+      loadData();
+    });
 
     function getImage(name) {
       return 'http://dev2.agence-atlas.fr/api/medial/' + name;
+    }
+
+    //SCROOL LOGO TEST GPT
+    const tabsContainer = ref(null);
+
+    function centerTab() {
+      const t_absContainer = document.querySelector('.tabs-container');
+      const tabs = t_absContainer.querySelectorAll('.q-tab');
+      const selectedTab = tabs[pindex.value];
+
+      if (selectedTab && t_absContainer) {
+        const scrollContainer =
+          t_absContainer.querySelector('.q-tabs__content');
+        const scrollMiddle = scrollContainer.offsetWidth / 2;
+        const tabMiddle = selectedTab.offsetWidth / 2;
+        const scrollLeft = selectedTab.offsetLeft + tabMiddle - scrollMiddle;
+        scrollContainer.scroll({
+          left: scrollLeft,
+          behavior: 'smooth',
+        });
+      }
     }
 
     return {
@@ -194,6 +232,8 @@ export default {
 
       selectLogo,
       getImage,
+
+      tabsContainer,
     };
   },
 };
@@ -239,6 +279,7 @@ export default {
 
 .title-p {
   font-size: 3vw;
+  line-height: 1 !important;
   /* margin-bottom: 2.5vh; */
 }
 .client-p {
