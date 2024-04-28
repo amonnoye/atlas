@@ -97,13 +97,13 @@ export default {
 
     const newProject = ref(
       new Project({
-        id: '', // Généré par l'API si nécessaire
+        id: 'jhkhjk', // Généré par l'API si nécessaire
         title: '',
         texte: '',
         texte_gras: '',
         id_instagram: '',
         img_logo: null,
-        order_by: '', // Laissez comme chaîne pour la saisie, convertissez en nombre avant l'envoi
+        order_by: '4', // Laissez comme chaîne pour la saisie, convertissez en nombre avant l'envoi
       })
     );
 
@@ -133,6 +133,7 @@ export default {
         });
       console.log(newProject.value);
       const formData = new FormData();
+      formData.append('id', newProject.value.id);
       formData.append('title', newProject.value.title);
       formData.append('texte', newProject.value.texte);
       formData.append('texte_gras', newProject.value.texte_gras);

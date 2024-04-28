@@ -54,25 +54,35 @@
         bg-color="accent"
         label-color="white"
         filled
-        :v-model="newProject.img_logo"
+        :v-model="edit_p.img_logo"
         label="Upload Logo"
         @update:model-value="handleFileChange"
         accept="image/*"
         class="q-my-sm"
-        ><template v-slot:append>
-          <q-img
-            v-if="newProject.img_logo"
-            :src="newProject.img_logo"
-            style="width: 100px; height: 100px; object-fit: cover"
-          /> </template
-      ></q-file>
-      <q-btn
-        label="Modifer le projet"
-        type="submit"
-        color="info"
-        class="q-my-sm text-bold text-black"
       />
-      <!-- <q-input
+      <div class="row flex flex-center">
+        <q-img
+          v-if="edit_p.img_logo"
+          :src="getImage(edit_p.img_logo)"
+          style="width: 120px; height: auto; object-fit: contain"
+        />
+        <span v-if="newProject.img_logo" class="text-bold q-px-md">
+          remplacé par ==></span
+        >
+        <q-img
+          v-if="newProject.img_logo"
+          :src="newProject.img_logo"
+          style="width: 120px; height: auto; object-fit: contain"
+        />
+      </div>
+      <div class="row flex flex-center">
+        <q-btn
+          label="Modifier le projet"
+          type="submit"
+          color="info"
+          class="q-my-sm text-bold text-black"
+        />
+        <!-- <q-input
         bg-color="accent"
         label-color="white"
         filled
@@ -81,6 +91,7 @@
         label="Ordre"
         class="q-my-sm"
       /> -->
+      </div>
     </q-form>
   </q-page>
 </template>
@@ -117,12 +128,13 @@ export default {
     );
     const imagePreview = ref('');
     function getImage(name) {
+      console.log(name);
       return 'http://dev2.agence-atlas.fr/api/medial/' + name;
     }
 
     const submitProject = () => {
       // Convertir order_by en nombre si ce n'est pas déjà fait
-      newProject.value.order_by = parseInt(newProject.value.order_by, 10);
+      edit_p.value.order_by = 5;
       const formDataimg = new FormData();
       // Ici, envoyez newProject.value à votre API
       formDataimg.append(
@@ -146,15 +158,21 @@ export default {
         });
       console.log(newProject.value);
       const formData = new FormData();
-      formData.append('title', newProject.value.title);
-      formData.append('texte', newProject.value.texte);
-      formData.append('texte_gras', newProject.value.texte_gras);
-      formData.append('id_instagram', newProject.value.id_instagram);
-      formData.append(
-        'img_logo',
-        document.querySelector('input[type="file"]').files[0]['name']
-      );
-      formData.append('order_by', newProject.value.order_by);
+      formData.append('id', edit_p.value.id);
+      formData.append('title', edit_p.value.title);
+      formData.append('texte', edit_p.value.texte);
+      formData.append('texte_gras', edit_p.value.texte_gras);
+      formData.append('id_instagram', edit_p.value.id_instagram);
+      if (document.querySelector('input[type="file"]').files.length > 0) {
+        formData.append(
+          'img_logo',
+          document.querySelector('input[type="file"]').files[0]['name']
+        );
+      } else {
+        formData.append('img_logo', edit_p.value.img_logo);
+      }
+
+      formData.append('order_by', edit_p.value.order_by);
       console.log(formData);
       api
         .post('/project_add', formData)
@@ -169,24 +187,27 @@ export default {
     };
 
     function handleFileChange(event) {
-      const files = event;
-      console.log('????');
-      console.log(files);
-      if (files && files[0]) {
-        const fileReader = new FileReader();
+      // const files = event;
+      // console.log(files);
+      const tt = URL.createObjectURL(event);
+      newProject.value.img_logo = tt;
+      console.log(tt);
+      // if (files && files[0]) {
+      //   const fileReader = new FileReader();
 
-        fileReader.onload = (e) => {
-          console.log(e.target.result);
-          // Stocker le résultat dans newProject.img_logo pour l'aperçu ou l'envoyer directement
-          // Cela suppose que votre API peut gérer la chaîne base64 pour l'upload d'image
-          // Sinon, vous devrez ajuster cette logique pour uploader le fichier comme FormData
-          newProject.value.img_logo = e.target.result;
-          imagePreview.value = e.target.result;
-          console.log(e.target.result);
-        };
+      //   fileReader.onload = (e) => {
+      //     console.log('???');
+      //     console.log(e.target.result);
+      //     // Stocker le résultat dans newProject.img_logo pour l'aperçu ou l'envoyer directement
+      //     // Cela suppose que votre API peut gérer la chaîne base64 pour l'upload d'image
+      //     // Sinon, vous devrez ajuster cette logique pour uploader le fichier comme FormData
+      //     newProject.value.img_logo = e.target.result;
+      //     imagePreview.value = e.target.result;
+      //     console.log(e.target.result);
+      //   };
 
-        fileReader.readAsDataURL(files[0]);
-      }
+      //   console.log(fileReader.readAsDataURL(files));
+      // }
     }
     const showList = ref(false);
     const seeList = (showlist) => {
