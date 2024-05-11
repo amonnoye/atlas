@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { fabYoutube } from '@quasar/extras/fontawesome-v6';
 
 export default {
@@ -120,6 +120,10 @@ export default {
     function toggleLeftDrawer() {
       leftDrawerOpen.value = !leftDrawerOpen.value;
     }
+
+    // TO Hide navbarscroll*******************************
+    const navKey = inject('nav-key');
+    navKey.value = 4;
 
     return {
       fabYoutube,

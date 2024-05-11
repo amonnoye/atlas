@@ -22,10 +22,19 @@
         <q-card-section class="col-3">
           <div class="text-h6">{{ projec.title }}</div>
         </q-card-section>
-        <q-card-section class="col-7">
-          {{ projec.texte }}
+        <q-card-section class="col-1">
+          <q-img
+            height="40px"
+            fit="contain"
+            :src="getImage(projec.img_logo)"
+          ></q-img>
         </q-card-section>
-        <q-card-action class="col-2 bg-blue flex flex-center"
+        <q-card-section class="col">
+          <div class="col-text">
+            {{ projec.texte }}
+          </div>
+        </q-card-section>
+        <q-card-action class="col-2 flex flex-center"
           ><q-btn
             icon="delete_forever"
             @click="supprimer(projec.id)"
@@ -176,10 +185,15 @@ export default {
       router.push({ name: 'backeditproject', params: { id: id } });
     }
 
+    function getImage(name) {
+      return 'http://dev2.agence-atlas.fr/api/medial/' + name;
+    }
+
     return {
       project,
       supprimer,
       edit,
+      getImage,
     };
   },
 };
@@ -236,6 +250,11 @@ export default {
   .card-p {
     background-color: $secondary;
     border: 2px solid white;
+  }
+
+  .col-text {
+    max-height: 60px !important;
+    overflow: hidden;
   }
 }
 </style>

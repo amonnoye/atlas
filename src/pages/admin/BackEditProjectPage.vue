@@ -54,13 +54,13 @@
         bg-color="accent"
         label-color="white"
         filled
-        :v-model="edit_p.img_logo"
+        v-model="newProject.img_logo"
         label="Upload Logo"
         @update:model-value="handleFileChange"
         accept="image/*"
         class="q-my-sm"
       />
-      <div class="row flex flex-center">
+      <div class="row flex flex-center bg-accent">
         <q-img
           v-if="edit_p.img_logo"
           :src="getImage(edit_p.img_logo)"
@@ -70,8 +70,8 @@
           remplacé par ==></span
         >
         <q-img
-          v-if="newProject.img_logo"
-          :src="newProject.img_logo"
+          v-if="newImg"
+          :src="newImg"
           style="width: 120px; height: auto; object-fit: contain"
         />
       </div>
@@ -136,6 +136,7 @@ export default {
       // Convertir order_by en nombre si ce n'est pas déjà fait
       edit_p.value.order_by = 5;
       const formDataimg = new FormData();
+      console.log(document.querySelector('input[type="file"]').files[0]);
       // Ici, envoyez newProject.value à votre API
       formDataimg.append(
         'fileToUpload',
@@ -169,7 +170,7 @@ export default {
           document.querySelector('input[type="file"]').files[0]['name']
         );
       } else {
-        formData.append('img_logo', edit_p.value.img_logo);
+        formData.append('img_logo', newProject.value.img_logo);
       }
 
       formData.append('order_by', edit_p.value.order_by);
@@ -186,28 +187,29 @@ export default {
         });
     };
 
+    const newImg = ref('');
     function handleFileChange(event) {
       // const files = event;
       // console.log(files);
-      const tt = URL.createObjectURL(event);
-      newProject.value.img_logo = tt;
-      console.log(tt);
-      // if (files && files[0]) {
-      //   const fileReader = new FileReader();
+      newImg.value = URL.createObjectURL(event);
+      // newProject.value.img_logo = tt;
+      // console.log(tt);
+      const files = event.target.files;
+      console.log(files);
+      if (files && files[0]) {
+        const fileReader = new FileReader();
+        console.log('ezrzerfzer');
+        fileReader.onload = (e) => {
+          console.log('eueueuheheueh');
+          // Stocker le résultat dans newProject.img_logo pour l'aperçu ou l'envoyer directement
+          // Cela suppose que votre API peut gérer la chaîne base64 pour l'upload d'image
+          // Sinon, vous devrez ajuster cette logique pour uploader le fichier comme FormData
+          //edit_p.value.img_logo = e.target.result;
+        };
 
-      //   fileReader.onload = (e) => {
-      //     console.log('???');
-      //     console.log(e.target.result);
-      //     // Stocker le résultat dans newProject.img_logo pour l'aperçu ou l'envoyer directement
-      //     // Cela suppose que votre API peut gérer la chaîne base64 pour l'upload d'image
-      //     // Sinon, vous devrez ajuster cette logique pour uploader le fichier comme FormData
-      //     newProject.value.img_logo = e.target.result;
-      //     imagePreview.value = e.target.result;
-      //     console.log(e.target.result);
-      //   };
-
-      //   console.log(fileReader.readAsDataURL(files));
-      // }
+        console.log(files[0]);
+        fileReader.readAsDataURL(files[0]);
+      }
     }
     const showList = ref(false);
     const seeList = (showlist) => {
@@ -308,6 +310,7 @@ export default {
     }
 
     return {
+      newImg,
       newProject,
       submitProject,
       handleFileChange,
