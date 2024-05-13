@@ -382,8 +382,8 @@ export default defineComponent({
 
     const isBack = computed(() => {
       const isB = router.currentRoute.value.name?.toString();
-      console.log(router.currentRoute.value.name);
-      console.log(router.currentRoute.value.name);
+      // console.log(router.currentRoute.value.name);
+      //console.log(router.currentRoute.value.name);
       if (_.isNil(isB)) {
         return false;
       } else {

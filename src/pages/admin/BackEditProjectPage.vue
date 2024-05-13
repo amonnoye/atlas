@@ -50,6 +50,9 @@
         label="ID Instagram"
         class="q-my-sm"
       />
+      <q-btn @click="AskInsta" color="accent"
+        >Ask For Instagram Autorisation</q-btn
+      >
       <q-file
         bg-color="accent"
         label-color="white"
@@ -198,9 +201,9 @@ export default {
       console.log(files);
       if (files && files[0]) {
         const fileReader = new FileReader();
-        console.log('ezrzerfzer');
+        // console.log('ezrzerfzer');
         fileReader.onload = (e) => {
-          console.log('eueueuheheueh');
+          // console.log('eueueuheheueh');
           // Stocker le résultat dans newProject.img_logo pour l'aperçu ou l'envoyer directement
           // Cela suppose que votre API peut gérer la chaîne base64 pour l'upload d'image
           // Sinon, vous devrez ajuster cette logique pour uploader le fichier comme FormData
@@ -246,8 +249,8 @@ export default {
             //  sellogos.value.push('s_' + projectInstance.img_logo); // Assumant que sellogos utilise id_instagram
             return projectInstance;
           });
-          console.log(project.value);
-          console.log(router.currentRoute.value.params.id);
+          // console.log(project.value);
+          // console.log(router.currentRoute.value.params.id);
           edit_p.value = project.value.find((x) => {
             if (x.id === router.currentRoute.value.params.id) {
               return true;
@@ -309,7 +312,32 @@ export default {
       //   });
     }
 
+    router.beforeEach((to, from, next) => {
+      if (to.query.code) {
+        // Vous avez le code ici, vous pouvez l'envoyer à votre serveur ou échanger le jeton ici
+        console.log('Code Instagram:', to.query.code);
+        // Ajoutez ici la logique pour échanger le code contre un jeton
+      }
+      next();
+    });
+
+    function AskInsta() {
+      //IGQWRNZAUo3UUdoM2Uxdk15Q0FYdkVXcWlmOVotUUxraUx6UUtWS3lvd3dydTNsTDIxM1ZAleUliNzE1SE5vMXRaVW9TZAVRSbk1XMVhUT2t1d1V0RzZAtdG13dlhvR3JqRkJhQXZA5ZAWNyak9Va1duM29fcEZAiX05fWmMZD
+      console.log('oeoeoeoeo');
+      // 525847695669461
+      const clientID = '525847695669461'; // Remplacez 'VotreClientID' par votre ID de client réel
+      const redirectURI = encodeURIComponent(
+        'https://dev2.agence-atlas.fr/api/auth'
+      ); // Remplacez 'VotreRedirectURI' par votre URI de redirection
+      const scope = encodeURIComponent('user_profile,user_media');
+      const authURL = `https://api.instagram.com/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}&scope=${scope}&response_type=code`;
+
+      // Ouvrir une nouvelle fenêtre pour l'autorisation
+      window.open(authURL, '_blank');
+    }
+
     return {
+      AskInsta,
       newImg,
       newProject,
       submitProject,
