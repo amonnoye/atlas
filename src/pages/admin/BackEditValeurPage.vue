@@ -2,44 +2,28 @@
   <q-page class="q-pa-xl flex flex-center addpropage" v-if="!showList">
     <q-item class="row fit flex flex-center justify-center">
       <q-item-section class="text-center item-link"
-        >Ajouter une Atlassienne</q-item-section
+        >Modifier une valeur</q-item-section
       >
     </q-item>
     <q-form @submit.prevent="submitProject" style="width: 50%">
       <q-input
         filled
-        v-model="newProject.nom"
-        label="Nom"
+        v-model="newProject.title"
+        label="Titre du projet"
         bg-color="accent"
         label-color="white"
         class="q-my-sm"
       />
       <q-input
         filled
-        v-model="newProject.prenom"
-        label="Prénom"
-        bg-color="accent"
-        label-color="white"
-        class="q-my-sm"
-      />
-      <q-input
-        filled
-        v-model="newProject.poste"
-        label="Poste"
-        bg-color="accent"
-        label-color="white"
-        class="q-my-sm"
-      />
-      <q-input
-        filled
-        v-model="newProject.resum"
+        v-model="newProject.texte"
         type="textarea"
-        label="Résumé"
+        label="Texte"
         bg-color="accent"
         label-color="white"
         class="q-my-sm"
       />
-      <!-- <q-input
+      <q-input
         filled
         v-model="newProject.texte_gras"
         type="textarea"
@@ -55,13 +39,13 @@
         label-color="white"
         label="ID Instagram"
         class="q-my-sm"
-      /> -->
+      />
       <q-file
         bg-color="accent"
         label-color="white"
         filled
-        v-model="newProject.picture"
-        label="Upload photo"
+        v-model="newProject.img_logo"
+        label="Upload Logo"
         @change="handleFileChange"
         accept="image/*"
         class="q-my-sm"
@@ -77,15 +61,15 @@
       /> -->
 
       <q-btn
-        label="Créer le membre de l'équipe"
+        label="Créer Projet"
         type="submit"
         color="secondary"
         class="q-my-sm"
       />
       <q-space />
       <q-btn
-        label="Liste des membres de l'équipe"
-        :to="'listpeople'"
+        label="Liste des projets"
+        :to="'listproject'"
         color="green"
         class="q-my-sm"
       />
@@ -95,7 +79,7 @@
 
 <script>
 import { inject, ref } from 'vue';
-import { Project, Team } from 'src/components/project';
+import { Project } from 'src/components/project';
 import { api } from 'src/boot/axios';
 import { useQuasar } from 'quasar';
 
@@ -112,20 +96,20 @@ export default {
     header.value = 1;
 
     const newProject = ref(
-      new Team({
+      new Project({
         id: '', // Généré par l'API si nécessaire
-        nom: '',
-        prenom: '',
-        poste: '',
-        resum: '',
-        picture: null,
-        orderBy: '', // Laissez comme chaîne pour la saisie, convertissez en nombre avant l'envoi
+        title: '',
+        texte: '',
+        texte_gras: '',
+        id_instagram: '',
+        img_logo: null,
+        order_by: '', // Laissez comme chaîne pour la saisie, convertissez en nombre avant l'envoi
       })
     );
 
     const submitProject = () => {
       // Convertir order_by en nombre si ce n'est pas déjà fait
-      newProject.value.orderBy = parseInt(newProject.value.orderBy, 10);
+      newProject.value.order_by = parseInt(newProject.value.order_by, 10);
       const formDataimg = new FormData();
       // Ici, envoyez newProject.value à votre API
       formDataimg.append(
@@ -134,45 +118,40 @@ export default {
       );
 
       api
-        .post('/uploadteam', formDataimg, {
+        .post('/upload', formDataimg, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         })
         .then((response) => {
           // Traitez la réponse de succès
-          console.log('Photo créé avec succès', response);
+          console.log('Projet créé avec succès', response);
         })
         .catch((error) => {
           // Gérez l'erreur
-          console.error('Erreur lors de la création du photo', error);
+          console.error('Erreur lors de la création du projet', error);
         });
       console.log(newProject.value);
-
       const formData = new FormData();
-      formData.append('id', newProject.value.id);
-      formData.append('nom', newProject.value.nom);
-      formData.append('prenom', newProject.value.prenom);
-      formData.append('poste', newProject.value.poste);
-      formData.append('resum', newProject.value.resum);
-      if (document.querySelector('input[type="file"]').files.length > 0) {
-        formData.append(
-          'picture',
-          document.querySelector('input[type="file"]').files[0]['name']
-        );
-      }
-
-      formData.append('orderBy', newProject.value.orderBy);
+      formData.append('title', newProject.value.title);
+      formData.append('texte', newProject.value.texte);
+      formData.append('texte_gras', newProject.value.texte_gras);
+      formData.append('id_instagram', newProject.value.id_instagram);
+      formData.append(
+        'img_logo',
+        document.querySelector('input[type="file"]').files[0]['name']
+      );
+      formData.append('order_by', newProject.value.order_by);
       console.log(formData);
       api
-        .post('/team_add', formData)
+        .post('/project_add', formData)
         .then((response) => {
           // Traitez la réponse de succès
-          console.log('memebre créé avec succès', response);
+          console.log('Projet créé avec succès', response);
         })
         .catch((error) => {
           // Gérez l'erreur
-          console.error('Erreur lors de la création du membre', error);
+          console.error('Erreur lors de la création du projet', error);
         });
     };
 
@@ -210,7 +189,7 @@ export default {
           row['id'] = rowIndex;
           console.log(project.value);
           project.value = data.value.map((item) => {
-            const projectInstance = new Team(item);
+            const projectInstance = new Project(item);
             // logos.value.push(projectInstance.img_logo); // Utilisez ici la propriété appropriée pour les logos
             //  sellogos.value.push('s_' + projectInstance.img_logo); // Assumant que sellogos utilise id_instagram
             return projectInstance;
@@ -229,14 +208,14 @@ export default {
       const formData = new FormData();
       formData.append('id', id);
       api
-        .post('/delete_team/', formData)
+        .post('/delete_project/', formData)
         .then(() => {
           // Suppression réussie, notifier l'utilisateur
           $q.notify({
             color: 'green',
             textColor: 'white',
             icon: 'check_circle',
-            message: 'Membre supprimé avec succès',
+            message: 'Projet supprimé avec succès',
           });
 
           // Recharger la liste des projets pour refléter la suppression
@@ -244,12 +223,12 @@ export default {
         })
         .catch((error) => {
           // Gérer l'erreur
-          console.error('Erreur lors de la suppression du membre', error);
+          console.error('Erreur lors de la suppression du projet', error);
           $q.notify({
             color: 'red',
             textColor: 'white',
             icon: 'error',
-            message: 'Erreur lors de la suppression du membre',
+            message: 'Erreur lors de la suppression du projet',
           });
         });
       // Affichez une boîte de dialogue de confirmation avant la suppression

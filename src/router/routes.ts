@@ -68,7 +68,7 @@ const routes: RouteRecordRaw[] = [
             component: () => import('pages/admin/BackPeoplePage.vue'),
           },
           {
-            path: 'editpeople',
+            path: 'editpeople/:id',
             name: 'backeditpeople',
             component: () => import('pages/admin/BackEditPeoplePage.vue'),
           },
@@ -76,6 +76,21 @@ const routes: RouteRecordRaw[] = [
             path: 'listpeople',
             name: 'backlistpeople',
             component: () => import('pages/admin/BackListPeoplePage.vue'),
+          },
+          {
+            path: 'addvaleur',
+            name: 'backaddvaleur',
+            component: () => import('pages/admin/BackValeurPage.vue'),
+          },
+          {
+            path: 'editvaleur/:id',
+            name: 'backeditvaleur',
+            component: () => import('pages/admin/BackEditValeurPage.vue'),
+          },
+          {
+            path: 'listvaleur',
+            name: 'backlistvaleur',
+            component: () => import('pages/admin/BackListValeurPage.vue'),
           },
         ],
       },

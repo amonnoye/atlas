@@ -2,7 +2,7 @@
   <q-page class="q-pa-xl flex flex-center propage">
     <q-item class="row fit flex flex-center justify-center">
       <q-item-section class="text-center item-link text-secondary"
-        >Liste des Atlassiennes</q-item-section
+        >Liste des Valeurs</q-item-section
       >
       <q-btn
         label="Nouvelle Atlassienne"
@@ -12,7 +12,7 @@
         class="q-my-sm"
       />
     </q-item>
-    <q-scroll-area style="height: 800px; width: 80%">
+    <q-scroll-area style="height: 600px; width: 80%">
       <q-card
         dark
         v-for="projec in project"
@@ -20,20 +20,10 @@
         class="q-mb-md row card-p"
       >
         <q-card-section class="col-3">
-          <div class="text-h6">{{ projec.poste }}</div>
+          <div class="text-h6">{{ projec.title }}</div>
         </q-card-section>
-        <q-card-section class="col-1">
-          <q-img
-            height="40px"
-            fit="contain"
-            :src="getImage(projec.picture)"
-          ></q-img>
-        </q-card-section>
-        <q-card-section class="col-2">
-          {{ projec.nom }} {{ projec.prenom }}
-        </q-card-section>
-        <q-card-section class="col-4 col-text" style="">
-          {{ projec.resum }}
+        <q-card-section class="col-7">
+          {{ projec.texte }}
         </q-card-section>
         <q-card-action class="col-2 bg-blue flex flex-center"
           ><q-btn
@@ -46,7 +36,7 @@
               class="bg-amber text-black text-bold shadow-4"
               :offset="[10, 10]"
             >
-              Supprimer le membre de l'équipe
+              Suprrimer le projet
             </q-tooltip></q-btn
           >
           <q-btn
@@ -59,7 +49,7 @@
               class="bg-amber text-black text-bold shadow-4"
               :offset="[10, 10]"
             >
-              Modifier le membre de l'équipe
+              Modifier le projet
             </q-tooltip></q-btn
           >
         </q-card-action>
@@ -74,7 +64,7 @@
 <script lang="ts">
 import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { Project, Team } from 'src/components/project';
+import { Project } from 'src/components/project';
 import { api } from 'src/boot/axios';
 import { useQuasar } from 'quasar';
 
@@ -91,11 +81,11 @@ export default {
     const header = inject('header-key');
     header.value = 1;
 
-    const team = ref([]);
+    const project = ref([]);
     const data = ref();
     function loadData() {
       api
-        .get('/team')
+        .get('/project')
         .then((response) => {
           data.value = response.data;
           const valeur = ref();
@@ -104,14 +94,14 @@ export default {
           let itemCount = 0;
           let rowIndex = 0;
           row['id'] = rowIndex;
-          console.log(team.value);
-          team.value = data.value.map((item) => {
-            const teamInstance = new Team(item);
+          console.log(project.value);
+          project.value = data.value.map((item) => {
+            const projectInstance = new Project(item);
             // logos.value.push(projectInstance.img_logo); // Utilisez ici la propriété appropriée pour les logos
             //  sellogos.value.push('s_' + projectInstance.img_logo); // Assumant que sellogos utilise id_instagram
-            return teamInstance;
+            return projectInstance;
           });
-          console.log(team.value);
+          console.log(project.value);
           // console.log(logos.value);
         })
         .catch((error) => {
@@ -124,7 +114,7 @@ export default {
     function supprimer(id) {
       $q.dialog({
         title: 'Confirmation',
-        message: 'Supprimer le membre ?',
+        message: 'Supprimer le projet ?',
         color: 'blue',
         class: 'bg-secondary text-bold',
         cancel: {
@@ -145,14 +135,14 @@ export default {
           const formData = new FormData();
           formData.append('id', id);
           api
-            .post('/team_delete/', formData)
+            .post('/delete_project/', formData)
             .then(() => {
               // Suppression réussie, notifier l'utilisateur
               $q.notify({
                 color: 'green',
                 textColor: 'white',
                 icon: 'check_circle',
-                message: 'Membre supprimé avec succès',
+                message: 'Projet supprimé avec succès',
               });
 
               // Recharger la liste des projets pour refléter la suppression
@@ -160,12 +150,12 @@ export default {
             })
             .catch((error) => {
               // Gérer l'erreur
-              console.error('Erreur lors de la suppression du membre', error);
+              console.error('Erreur lors de la suppression du projet', error);
               $q.notify({
                 color: 'red',
                 textColor: 'white',
                 icon: 'error',
-                message: 'Erreur lors de la suppression du membre',
+                message: 'Erreur lors de la suppression du projet',
               });
             });
         })
@@ -181,19 +171,14 @@ export default {
     }
 
     function edit(id) {
-      console.log('member : ' + id);
-      router.push({ name: 'backeditpeople', params: { id: id } });
-    }
-
-    function getImage(name) {
-      return 'http://dev2.agence-atlas.fr/api/media/' + name;
+      console.log('project : ' + id);
+      router.push('editproject');
     }
 
     return {
-      project: team,
+      project,
       supprimer,
       edit,
-      getImage,
     };
   },
 };
@@ -250,11 +235,6 @@ export default {
   .card-p {
     background-color: $secondary;
     border: 2px solid white;
-  }
-
-  .col-text {
-    max-height: 60px !important;
-    overflow: hidden;
   }
 }
 </style>

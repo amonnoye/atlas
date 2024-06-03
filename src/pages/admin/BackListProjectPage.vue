@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-xl flex flex-center propage">
-    <q-item class="row fit flex flex-center justify-center">
+    <q-item class="row full-width flex flex-center justify-center">
       <q-item-section class="text-center item-link text-secondary"
         >Liste des projects</q-item-section
       >
@@ -9,10 +9,10 @@
         icon="add"
         :to="'addproject'"
         color="green"
-        class="q-my-sm"
+        class=""
       />
     </q-item>
-    <q-scroll-area style="height: 600px; width: 80%">
+    <q-scroll-area style="height: 800px; width: 80%">
       <q-card
         dark
         v-for="projec in project"
