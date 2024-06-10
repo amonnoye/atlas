@@ -325,7 +325,7 @@ export default {
       console.log('oeoeoeoeo');
       // 434149325893660
       // 525847695669461
-      const clientID = '525847695669461'; // Remplacez 'VotreClientID' par votre ID de client réel
+      const clientID = '434149325893660'; // Remplacez 'VotreClientID' par votre ID de client réel
       const redirectURI = encodeURIComponent(
         'https://dev2.agence-atlas.fr/api/auth'
       ); // Remplacez 'VotreRedirectURI' par votre URI de redirection
