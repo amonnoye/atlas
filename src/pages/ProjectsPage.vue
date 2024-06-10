@@ -50,17 +50,35 @@
               <div class="text-p">{{ project[pindex].texte }}</div>
             </q-scroll-area>
           </div>
-          <div class="col-6">
-            <div class="flex flex-center">
-              <div class="row q-gutter-md" style="margin-top: 7vh">
-                <div class="col-3" v-for="n in 9" :key="n">
-                  <q-skeleton
-                    animation="blink"
-                    class=""
-                    height="13vh"
-                    width="13vh"
+          <div class="col-6 q-pa-xl" style="">
+            <!-- <div class="flex flex-center">
+              <div class="row" style="margin-top: 7vh">
+                <div
+                  class="col-3"
+                  v-for="media in instagramMedia"
+                  :key="media.id"
+                >
+                  <q-img
+                    :src="media.media_url"
+                    class="instagram-image"
+                    height="15vh"
+                    width="15vh"
                   />
                 </div>
+              </div>
+            </div> -->
+            <div class="instagram-grid" v-if="instagramMedia.length > 0">
+              <div
+                v-for="media in instagramMedia"
+                :key="media.id"
+                class="instagram-item"
+              >
+                <q-img :src="media.media_url" class="instagram-image" />
+              </div>
+            </div>
+            <div class="instagram-grid" v-else>
+              <div class="instagram-item" v-for="n in 9" :key="n">
+                <q-skeleton animation="blink" class="instagram-image" />
               </div>
             </div>
           </div>
@@ -113,12 +131,41 @@ export default {
         ' votre marque...'
     );
 
+    const instagramMedia = ref([]);
+
+    async function fetchInstagramMedia(projectId) {
+      try {
+        const response = await api.get(
+          `get_long_lived_tokens?project_id=${projectId}`
+        );
+        if (response.data.media && response.data.media.length > 0) {
+          console.log(response.data.media);
+          instagramMedia.value = response.data.media;
+        }
+      } catch (error) {
+        instagramMedia.value = [];
+        console.error('Error fetching Instagram media:', error);
+      }
+    }
+
     function selectLogo(index) {
       pindex.value = index;
-
+      fetchInstagramMedia(project.value[index].id);
       nextTick(() => {
         centerTab();
       });
+    }
+
+    async function fetchInstagramMediaForProject(projectId) {
+      const selectedProject = project.value.find(
+        (proj) => proj.id === projectId
+      );
+      if (selectedProject && selectedProject.access_token) {
+        instagramMedia.value = await fetchInstagramMedia(
+          selectedProject.access_token
+        );
+        console.log(instagramMedia.value);
+      }
     }
 
     const logos = ref([
@@ -161,6 +208,7 @@ export default {
       api
         .get('/project')
         .then((response) => {
+          console.log(response);
           data.value = response.data;
           const valeur = ref();
           valeur.value = [];
@@ -175,8 +223,9 @@ export default {
             sellogos.value.push('s_' + projectInstance.img_logo); // Assumant que sellogos utilise id_instagram
             return projectInstance;
           });
-          tab.value = project.value[project.value.length / 2].id;
-          selectLogo(project.value.length / 2);
+          console.log(project.value.length / 2);
+          tab.value = project.value[Math.floor(project.value.length / 2)].id;
+          selectLogo(Math.floor(project.value.length / 2));
           console.log(project.value);
           //console.log(logos.value);
 
@@ -229,7 +278,7 @@ export default {
       intro,
       pindex,
       project,
-
+      instagramMedia,
       selectLogo,
       getImage,
 
@@ -308,6 +357,26 @@ export default {
   padding: 0 70px;
 }
 
+.instagram-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 2fr);
+  gap: 10px; /* Adjust the gap as needed */
+}
+
+.instagram-item {
+  width: 100%;
+  padding-top: 100%; /* 1:1 Aspect Ratio */
+  position: relative;
+}
+
+.instagram-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 /* .logo-scroll-list {
   overflow-x: auto;
 }*/
