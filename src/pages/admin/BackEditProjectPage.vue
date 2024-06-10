@@ -322,8 +322,8 @@ export default {
     });
 
     function AskInsta() {
-      //IGQWRNZAUo3UUdoM2Uxdk15Q0FYdkVXcWlmOVotUUxraUx6UUtWS3lvd3dydTNsTDIxM1ZAleUliNzE1SE5vMXRaVW9TZAVRSbk1XMVhUT2t1d1V0RzZAtdG13dlhvR3JqRkJhQXZA5ZAWNyak9Va1duM29fcEZAiX05fWmMZD
       console.log('oeoeoeoeo');
+      // 434149325893660
       // 525847695669461
       const clientID = '525847695669461'; // Remplacez 'VotreClientID' par votre ID de client réel
       const redirectURI = encodeURIComponent(
@@ -333,7 +333,31 @@ export default {
       const authURL = `https://api.instagram.com/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}&scope=${scope}&response_type=code`;
 
       // Ouvrir une nouvelle fenêtre pour l'autorisation
-      window.open(authURL, '_blank');
+      // window.open(authURL, '_blank');
+
+      // Envoyer l'id du projet en cours d'édition à l'API avant d'ouvrir l'URL d'autorisation
+      const formData = new FormData();
+      formData.append('last_id_project', edit_p.value.id);
+
+      api
+        .post('/setIdProjectInsta', formData)
+        .then((response) => {
+          console.log('ID du projet enregistré avec succès', response);
+          // Ouvrir une nouvelle fenêtre pour l'autorisation
+          window.open(authURL, '_blank');
+        })
+        .catch((error) => {
+          console.error(
+            "Erreur lors de l'enregistrement de l'ID du projet",
+            error
+          );
+          $q.notify({
+            color: 'red',
+            textColor: 'white',
+            icon: 'error',
+            message: "Erreur lors de l'enregistrement de l'ID du projet",
+          });
+        });
     }
 
     return {
